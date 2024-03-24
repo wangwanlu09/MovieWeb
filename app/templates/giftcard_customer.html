@@ -1,0 +1,105 @@
+
+{% extends "navdash_customer.html" %}
+
+{% block title %}Giftcard History{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-center container" style="font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; margin-top: 1%;">
+    <h1>GIFTCARD PURCHASE HISTORY</h1>
+</div>
+  <!----Search and add movie---->
+<!-- <div class="container d-flex">
+    <div class="input-group mb-3">
+        <label for="allMovies"></label>
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for movies (booking_id, movie_name, ticket_types)" class="form-control border-secondary">
+    <div>
+        <button type="submit" class="btn btn-secondary"><i class="bi bi-search"></i></button>
+        <button type="submit" class="btn btn-dark"><a href="#"class="text-decoration-none text-white" style="font-size: 13px;" onclick="ClearFields();">Cancel</a></button>
+    </div>
+    
+    </div>
+</div> -->
+
+<!-- table: all the movies -->
+
+<div class="d-flex justify-content-center container" style="margin-top: 1%;">
+
+<div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+    <div class="table-responsive">
+        <table class="table align-middle table-bordered" id="myTable">
+            <!-- tablr headers -->
+            <thead class="table-dark text-light">
+                <th>Purchase Date</th>
+                <th>Giftcard Number</th>
+                <th>Giftcard Type</th>
+                <th>Giftcard Value</th>
+                <th>Giftcard Balance</th>
+                <th>Print</th>
+            </thead>
+            
+            <tbody>
+                {% for g in giftcards %}
+                <tr>
+                    <tr>
+                        <td class="col-md-2" style="font-size: 13px;">{{ g['payment_date'].strftime('%d/%m/%Y') }}</td>
+                        <td class="col-md-2" style="font-size: 13px;">{{ g['giftcard_number'] }}</td>
+                        <td class="col-md-2" style="font-size: 13px;">{{ g['giftcard_name'] }}</td>
+                        <td class="col-md-2" style="font-size: 13px;">{{ g['giftcard_value'] }}</td>
+                        <td class="col-md-2" style="font-size: 13px;">{{ g['balance'] }}</td>
+                        <td class="col-md-2" style="font-size: 13px;">
+                            {% if g['balance'] > 0 %}
+                            <a type="button" class="btn btn-warning" href="{{ url_for('giftcards.giftcard_preview', giftcardid = g['giftcardid']) }}" target="_blank">Print</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</div>
+
+<!-- <script>
+    function myFunction() {
+      // Declare variables
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("myTable");
+      tr = table.getElementsByTagName("tr");
+    
+      // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+        td1 = tr[i].getElementsByTagName("td")[2];
+        td2 = tr[i].getElementsByTagName("td")[3];
+        td5 = tr[i].getElementsByTagName("td")[4];
+
+        if (td1 || td2 || td5) {
+            txtValue1 = td1.textContent || td1.innerText;
+            txtValue2 = td2.textContent || td2.innerText;
+            txtValue5 = td5.textContent || td5.innerText;
+
+            if (txtValue1.toUpperCase().indexOf(filter) > -1 || 
+                txtValue2.toUpperCase().indexOf(filter) > -1 ||
+                txtValue5.toUpperCase().indexOf(filter) > -1 
+            ){
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+    }
+    </script>
+
+<script>
+    function ClearFields() {
+
+document.getElementById("myInput").value = "";
+
+}
+</script> -->
+
+{% endblock %}

@@ -1,0 +1,173 @@
+{% if session['role'] == 'manager' %}
+{% extends "navdash_manager.html" %}
+{% elif session['role'] == 'admin' %}
+{% extends "navdash_admin.html" %}
+{% else %}
+{% extends "navdash_staff.html" %}
+{% endif %}
+{% block title %}Schedule List{% endblock %}
+
+{% block content %}
+  
+
+  <!-- Extension -->
+  <div class="container d-flex justify-content-end mt-5" style="font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">
+    <h1><a href="{{url_for('checkIn.session_checkin')}}" style="color:black;">TICKET CHECK STATIONS</a></h1>
+  </div>
+  <div class="container d-flex">
+    <div class="input-group mb-3">
+        <label for="allPromotions"></label>
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for ticket(ticket check ID or seat number)" class="form-control border-secondary">
+        <div>
+            <button type="submit" class="btn btn-secondary"><i class="bi bi-search"></i></button>
+            <button type="submit" class="btn btn-dark"><a href="#" class="text-decoration-none text-white"style="font-size: 13px;">Cancel</a></button>
+        </div>
+    </div>
+ </div>
+ 
+ <form method="POST" action="{{ url_for('checkIn.check_in_ticket')}}" id="myForm">
+  <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+    <div class="table-responsive">
+        <table class="table align-middle table-bordered" id="myTable">
+        <thead class="table-dark text-light">
+          <!-- <th>Ticket Check ID</th> -->
+          <th>Session ID</th>
+          <th>Movie Name</th>
+          <th>Cinema</th>
+          <th>Session Date</th>
+          <th>Session Time</th>
+          <th>Seat Number</th>
+          <th>Is Booked ?</th>
+          <th>Check status</th>
+        </thead>
+        <tbody>
+          {% for tc in ticket_check_list %}
+          <tr>
+              <!-- <td class="col-md-1">{{ tc['bsid']}}</td> -->
+              <td class="col-md-1">{{ tc['sessionid']}}</td>
+              <td class="col-md-3"><a target="_blank" href="{{ url_for('managemovies.movies_view', movieid=tc['movieid']) }}">{{ tc['title']}}</a></td>
+              <td class="col-md-1">{{ tc['name']}}</td>
+              <td class="col-md-1">{{ tc['session_date']}}</td>
+              <td class="col-md-1">{{ tc['sessiontime_12hrs']}}</td>
+              <td class="col-md-1">{{ tc['seat_number']}}</td>
+              {% if tc['is_booked'] == 1 %}
+              <td class="col-md-1">Yes</td>
+              {% else %}
+              <td class="col-md-1">No</td>
+              {% endif %}
+              {% if tc['is_booked'] == 0 %}
+              <td></td>
+              {% else %}
+              <td class="col-md-2">
+                {% if tc['is_checkin'] == 1 %}
+                
+                  <div class="form-check">
+                      <input class="form-check-input" type="radio" name="flexRadioDefault{{ tc['bsid']}}" value="Not_Checked" id="flexRadioDefault{{ tc['bsid']}}_1"  style="background-color: lightgray;">
+                      <label class="form-check-label" for="flexRadioDefault1">
+                          Not Checked
+                      </label>
+                  </div>
+                  <div class="form-check">
+                      <input class="form-check-input" type="radio" name="flexRadioDefault{{ tc['bsid']}}" value="Checked" id="flexRadioDefault{{ tc['bsid']}}_2" checked>
+                      <label class="form-check-label" for="flexRadioDefault2">
+                          Checked
+                      </label>
+                  </div>
+
+                {% elif tc['is_checkin'] == 0 %}
+              
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="flexRadioDefault{{ tc['bsid']}}" value="Not_Checked" id="flexRadioDefault{{ tc['bsid']}}_1" style="background-color:lightgray;" checked>
+                  <label class="form-check-label" for="flexRadioDefault1">
+                      Not Checked
+                  </label>
+              </div>
+              <div class="form-check">
+                  <input class="form-check-input" type="radio" name="flexRadioDefault{{ tc['bsid']}}" value="Checked" id="flexRadioDefault{{ tc['bsid']}}_2" >
+                  <label class="form-check-label" for="flexRadioDefault2">
+                      Checked
+                  </label>
+              </div>
+              {% else %}
+        
+              {% endif %}
+
+              </td>
+              {% endif %}
+              <input type="hidden" value="{{ tc['sessionid'] }}" name="sessionid" id="sessionid" >
+              <input type="hidden" class="bsid-data" data-bsid="{{ tc['bsid'] }}">
+
+          </tr>
+      {% endfor %}
+        </tbody>
+    </div>
+    </div>
+ 
+  <!-- Add a hidden input field after user clicked -->
+  <input type="hidden" id="selectedRadioValue" name="selectedRadioValue" value="">
+  <input type="hidden" id="bsidValue" name="bsidValue" value="">
+
+  <!-- Use JavaScript to submit the form when a radio is clicked -->
+  <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          var radios = document.querySelectorAll('input[type=radio]');
+          radios.forEach(function (radio) {
+              radio.addEventListener('click', function () {
+{                 // Get bsid from the data attribute
+                  var bsid = this.closest('tr').querySelector('.bsid-data').dataset.bsid;}
+                  // Update the hidden input with the selected radio's value
+                  document.getElementById('selectedRadioValue').value = this.value;
+                  document.getElementById('bsidValue').value = bsid;
+                  // Submit the form
+                  document.querySelector('form').submit();
+              });
+          });
+      });
+  </script>
+</form>
+
+
+<script>
+  function myFunction() {
+  // Declare variables
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  
+  // Loop through all table rows, and hide those who don't match the search query
+      for (i = 0; i < tr.length; i++) {
+      td1 = tr[i].getElementsByTagName("td")[0];
+      td7 = tr[i].getElementsByTagName("td")[6];
+
+      if (td1 || td7 ) {
+          txtValue1 = td1.textContent || td1.innerText;
+          txtValue7 = td7.textContent || td7.innerText;
+
+          if (txtValue1.toUpperCase().indexOf(filter) > -1 || 
+              txtValue7.toUpperCase().indexOf(filter) > -1 
+          ){
+              tr[i].style.display = "";
+          } else {
+              tr[i].style.display = "none";
+          }
+      }
+  }
+  }
+
+    function ClearFields() {
+
+    document.getElementById("myInput").value = "";
+    var table = document.getElementById("myTable");
+    var tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      tr[i].style.display = "";
+    }
+    }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
+{% endblock %}

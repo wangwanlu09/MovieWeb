@@ -1,0 +1,11 @@
+﻿staffid,firstname,lastname,email,phone,accountid,join_date
+1,Amy,Adams,amy.adams@moviemagic.com,0201111111,1,1/01/2020
+2,Alex,Anderson,alex.anderson@moviemagic.com,0202222222,2,1/01/2020
+3,Molly,Morris,molly.morris@moviemagic.com,0223333333,3,1/06/2020
+4,Mike,Murphy,mike.murphy@moviemagic.com,0224444444,4,1/10/2021
+5,Samuel,Smith,samuel.smith@moviemagic.com,0275555555,5,1/03/2020
+6,Steven,Scott,steven.scott@moviemagic.com,0216666666,6,1/03/2020
+7,Simon,Sanders,simon.sanders@moviemagic.com,0227777777,7,29/09/2020
+8,Shepard,Smith,shepard.smith@moviemagic.com,0228888888,8,5/06/2020
+9,Sally,Sanders,sally.sanders@moviemagic.com,0279999999,9,14/01/2021
+10,Santana,Scott,santana.scott@moviemagic.com,0221010101,10,22/02/2021

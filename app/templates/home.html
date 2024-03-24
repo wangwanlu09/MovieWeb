@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block head %}
+<style>
+        #carouselExampleCaptions img {
+        object-fit: cover; 
+        height: 100%; 
+      }
+      .profile-picture {
+      max-width: 40px;
+      height: auto;
+      border-radius: 50%;
+      }
+      a{
+          text-decoration: none;
+      }
+      body, html {
+        height: 100%;
+        margin: 0;
+        overflow: auto;
+        background-color: black;
+      }
+      .rating {
+        display: inline-block;
+    min-width: 30px;
+    height: 30px;
+    border: 1px solid white;
+    font-size: 18px;
+    margin: 3px;
+    text-align: center;
+    line-height: 30px;
+    padding: 0px 5px;
+    vertical-align: bottom;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    text-shadow: none !important;
+    box-sizing: content-box !important;
+    margin-bottom: 0.5em;
+      }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="carouselExampleCaptions" class="carousel slide">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+         <!--image change new path -->
+        <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=3259&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100" alt="Movie Image1" style="width: 1200px; height: 480px;">
+        <div class="carousel-caption d-none d-md-block">
+          <h5>Movie Magic</h5>
+          <p>An extraordinary Cinema Theatre Complex in Rolleston</p>
+        </div>
+      </div>
+      <div class="carousel-item">
+         <!--image change new path -->
+        <img src="https://images.unsplash.com/photo-1530925486883-d9da662d497c?q=80&w=3186&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100" alt="Movie Image2" style="width: 1200px; height: 480px;">
+        <div class="carousel-caption d-none d-md-block">
+          <h5>Tuesday Daytime Discount</h5>
+          <p>Just book a movie showing on Tuesday</p>
+        </div>
+      </div>
+      <div class="carousel-item">
+         <!--image change new path -->
+        <img src="https://images.unsplash.com/photo-1618336753974-aae8e04506aa?q=80&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100" alt="Movie Image3" style="width: 1200px; height: 480px;">
+        <div class="carousel-caption d-none d-md-block">
+          <h5>Excellent Cinemas</h5>
+          <p>Three luxury cinemas and one auditorium widescreen cinema</p>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+<div class="container d-flex justify-content-end mt-5 mb-5" style="color:white; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">
+  <h1>Showing Now</h1>
+</div>
+
+<!-- <div class="container d-flex flex-column justify-content-center">
+  <div class="card mb-4" style="max-width: 1000px; background-color: transparent; border: none">
+      <div class="row g-0">
+          <div class="col-md-3">
+              <img src="https://substackcdn.com/image/fetch/w_1456,c_limit,f_webp,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2Fbce9bd1a-43c5-414e-8193-86609b58239d_394x499.png" class="img-fluid rounded-start" alt="Movie1" style="width: 180px; height:auto">
+          </div>
+          <div class="col-md-8">
+              <div class="card-body bg-transparent text-white">
+                  <h5 class="card-title"><span style="font-weight: bold;">Harry Potter and the Sorcerer's Stone</span></h5>
+                  <p class="card-text mb-5" style="font-weight: 50;"><span style="font-weight: bold; font-size: 25px;">"</span>An orphaned boy enrolls in a school of wizardry, where he learns the truth about himself, his family and the terrible evil that haunts the magical world.<span style="font-weight: bold; font-size: 25px;">"</span></p>
+                  <div class="d-flex justify-content-between align-items-end">
+                      <button type="submit" class="btn btn-outline-light btn-light btn-dark">More</button>
+                      <div class="d-flex flex-column align-items-center">
+                          <img src="images/PG.png" class="mb-2" style="height: 25px; width: 25px;">
+                          <span style="font-weight: bold; font-size: small; color:gray">152m | Adventure</span>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div> -->
+<!---line-->   
+<!-- <div class="container d-flex mb-4" style="border-top: 1px solid gray;"></div> -->
+
+{% for movie in movies %}
+<div class="container d-flex flex-column justify-content-center">
+<div class="card mb-4" style="max-width: 1000px; background-color: transparent; border: none">
+  <div class="row g-0">
+      <div class="col-md-3">
+        <a href="/details/movie?movieid={{ movie['movieid'] }}"><img src="{{ movie['image_url'] }}" class="img-fluid rounded-start" alt="Movie1" style="width: 180px; height:auto"></a> 
+      </div>
+      <div class="col-md-8">
+          <div class="card-body bg-transparent text-white">
+              <h5 class="card-title"><span style="font-weight: bold;">{{ movie['title'] }}</span></h5>
+              <p class="card-text mb-5" style="font-weight: 50;"><span style="font-weight: bold; font-size: 25px;">"</span>{{ movie['descriptions'] }}<span style="font-weight: bold; font-size: 25px;">"</span></p>
+              <div class="d-flex justify-content-between align-items-end">
+                  <!----add a link at more button-->
+                          <button type="submit" class="btn btn-outline-light btn-light btn-dark"><a href="/details/movie?movieid={{ movie['movieid'] }}" style="text-decoration: none; color: inherit;">More</a></button>
+                  <div class="d-flex flex-column align-items-center">
+                      <!-- <div class="mb-2" style="background-color:{{ movie['color'] }}; height: 25px; width: 25px; border-radius: 50%"><p style="font-weight: bold; font-size: medium; color:black; margin: 0; text-align: center">{{ movie['rating_code'] }}</p></div> -->
+                      <div class="mb-2 rating" style="background-color:{{ movie['color'] }};"><p style="font-weight: bold; font-size: medium; color:black; margin: 0; text-align: center">{{ movie['rating_code'] }}</p></div>
+                      <span style="font-weight: bold; font-size: small; color:gray">{{ movie['runtime'] }}m | {{ movie['genre_name'] }}</span>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+</div>
+
+<div class="container d-flex mb-4" style="border-top: 1px solid gray;"></div>
+{% endfor %}
+
+
+  
+{% endblock %}

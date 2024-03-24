@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+     <!----if login-->
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"> 
+    <style>
+      .profile-picture {
+      max-width: 40px;
+      height: auto;
+      border-radius: 50%;
+      }
+    </style>  
+  </head>
+  <!----delete--->
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark" style="color: black">
+      <div class="container-fluid">
+        <a class="navbar-brand">
+          <i class="bi bi-film"></i>
+          <span style="font-family: Impact;">MAGIC</span>
+        </a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="baseLogCustomer.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Movies</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                About More
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Gift card</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Promotion</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Contact Us</a></li>
+              </ul>
+            </li>
+          </ul>
+          <form class="d-flex" role="search">
+            <div class="input-group">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button type="submit" class="input-group-text"><i class="bi bi-search"></i></button>
+            </div>
+          </form>
+            <div class="nav-item dropdown text-body-secondary link-light ms-2">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <!-- change new path -->
+                  <img src="images/customer1-01.png" alt="Profile Picture" class="profile-picture" style="border: 1px solid white;">
+              </a>
+              <ul class="dropdown-menu dropdown-menu-dark">
+                <li><a class="dropdown-item" href="dashprofile_customer.html">Profile</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Bookings</a></li>
+                <li><a class="dropdown-item" href="#">Gift Card</a></li>
+                <li><a class="dropdown-item" href="#">Promotion</a></li>
+              </ul>
+            </div>
+            <a href="base.html" class="btn btn-outline-light btn-light btn-dark ms-2 me-2" type="submit">Logout</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container d-flex justify-content-center mt-5 mb-4" style="color:rgb(0, 0, 0); font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">
+        <!----jinja change name-->
+        <h1>BIRTHDAY EGIFT CARD</h1>
+      </div>
+       <!----jinj---->
+      <div class="container" style="width: 10rem;" >
+        <img src="https://plus.unsplash.com/premium_photo-1673309121075-536e188f8531?q=80&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="card-img-top" alt="Promotion image">
+    </div>
+    <div class="container">
+    <div class="container d-flex justify-content-center mt-2">
+        <h2>$20-$50</h2>
+    </div>
+    <div class="container d-flex justify-content-center mt-5 mb-5">
+        <div  class="col-md-2 mx-2">
+            Amount:
+             <select class="form-select" aria-label="Default select example">
+                 <option value="20">$20</option>
+                 <option value="25">$25</option>
+                 <option value="30">$30</option>
+               </select>
+         </div>
+         <div  class="col-md-2 mx-2">
+            Quantity:
+            <select id="quantitySelect" class="form-select" aria-label="Default select example">
+                 <option value="0">0</option>
+                 <option value="1">1</option>
+                 <option value="2">2</option>
+                 <option value="3">3</option>
+               </select>
+         </div>
+    </div>
+    <div class="container d-flex justify-content-center mb-3 mb-5">
+        <button id="checkoutBtn" type="submitsubmitsubmit" class="btn btn-dark position-relative">
+            <i class="bi bi-cart-fill"></i> <a href="giftcard_detail2.html" class="text-decoration-none text-white">Check Out</a>
+            <span id="cartItemCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              0
+              <span class="visually-hidden">unread messages</span>
+            </span>
+        </button>
+    </div>
+    <p> 
+        Valid for any movie, any time – your Movie eGift Card can be used for admissions to the latest kid's movie and their favourite cinema snacks from the Scoop Alley/Candy Bar to munch on during the movie.
+         Choose a value from $20 - $50 - the perfect birthday gift for the mini movie lover in your life! 
+    </p>
+    <p  class="text-center">
+       Valid for 12 months from date of purchase.
+    </p>
+   
+    </div>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script>
+    const quantitySelect = document.getElementById('quantitySelect');
+    const checkoutBtn = document.getElementById('checkoutBtn');
+    const cartItemCount = document.getElementById('cartItemCount');
+
+    quantitySelect.addEventListener('change', updateCartItemCount);
+
+    checkoutBtn.addEventListener('click', function (event) {
+        const selectedQuantity = quantitySelect.value;
+
+        if (selectedQuantity > 0) {
+            cartItemCount.innerText = selectedQuantity;
+        } else {
+            event.preventDefault();
+            alert('Please select a quantity greater than 0 before checking out.');
+        }
+    });
+
+    function updateCartItemCount() {
+        const selectedQuantity = quantitySelect.value;
+        cartItemCount.innerText = selectedQuantity;
+    }
+</script>
+
+
+  </body>
+</html>

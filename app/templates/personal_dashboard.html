@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Customer{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"> 
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+        <div class="container-fluid">
+            <a class="navbar-brand">
+              <i class="bi bi-film"></i>
+              <span style="font-family: Impact;">MAGIC</span>
+            </a>
+        </div>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="baseLogCustomer.html">Home</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link" aria-current="page" href="#">Profile</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Bookings</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">GiftCard</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Promotion</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="base.html">Logout</a>
+              </li>
+            </ul>
+          </div>
+        </div>       
+    </nav>  
+  
+    <div class="card text-center ">
+      <div class="card-header">
+        Customer Informations
+      </div>
+      <div class="card-body">
+        <h2 class="card-title">Welcome Back!</h2>
+        <p class="card-text">Welcome Back! Are you looking for the following functions?</p>
+        <a href="#" class="btn btn-dark mx-1">Function 1 </a>
+        <a href="#" class="btn btn-dark mx-1">Function 2</a>
+      </div>
+      <div class="card-footer text-body-secondary">
+        Wendesday,7 February
+      </div>
+    </div>
+    <div class="container d-flex justify-content-center">
+      <div class="card mt-5 container mx-2" style="box-shadow: 0px 4px 8px 0px rgba(70, 70, 70, 0.2); width: 500px;">
+        <div class="card-header">
+          Movies
+        </div>
+        <div class="card-body">
+          <h4 class="card-title">Booking Movie History</h4>
+          <div><span class="fw-bold mx-2">Title:</span>name</div>
+          <div><span class="fw-bold mx-2">Label:</span>name</div>
+          <div><span class="fw-bold mx-2">Details:</span>name</div>
+          <a href="#" class="btn btn-dark mt-3">View all</a>
+        </div>
+      </div>
+  
+    <div class="card mt-5 container mx-2" style="box-shadow: 0px 4px 8px 0px rgba(70, 70, 70, 0.2); width: 500px;">
+      <div class="card-header">
+        GiftCards
+      </div>
+      <div class="card-body">
+        <h4 class="card-title">Booking GiftCards History</h4>
+        <div><span class="fw-bold mx-2">Title:</span>name</div>
+        <div><span class="fw-bold mx-2">Label:</span>name</div>
+        <div><span class="fw-bold mx-2">Details:</span>name</div>
+        <a href="#" class="btn btn-dark mt-3">View all</a>
+      </div>
+    </div>
+
+    <div class="card mt-5 container mx-2" style="box-shadow: 0px 4px 8px 0px rgba(70, 70, 70, 0.2); width: 500px;">
+      <div class="card-header">
+        GiftCards
+      </div>
+      <div class="card-body">
+        <h4 class="card-title">Booking GiftCards History</h4>
+        <div><span class="fw-bold mx-2">Title:</span>name</div>
+        <div><span class="fw-bold mx-2">Label:</span>name</div>
+        <div><span class="fw-bold mx-2">Details:</span>name</div>
+        <a href="#" class="btn btn-dark mt-3">View all</a>
+      </div>
+    </div>
+   
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>

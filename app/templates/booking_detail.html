@@ -1,0 +1,116 @@
+
+{% extends "navdash_customer.html" %}
+
+{% block title %}Booking Detail{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-center container" style="font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; margin-top: 1%;">
+    <h1>BOOKING DETAIL</h1>
+</div>
+  <!----Search and add movie---->
+<!-- <div class="container d-flex">
+    <div class="input-group mb-3">
+        <label for="allMovies"></label>
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for movies (booking_id, movie_name, ticket_types)" class="form-control border-secondary">
+    <div>
+        <button type="submit" class="btn btn-secondary"><i class="bi bi-search"></i></button>
+        <button type="submit" class="btn btn-dark"><a href="#"class="text-decoration-none text-white" style="font-size: 13px;" onclick="ClearFields();">Cancel</a></button>
+    </div>
+    
+    </div>
+</div> -->
+
+<!-- table: all the movies -->
+
+<div class="d-flex justify-content-center container" style="margin-top: 1%;">
+
+<div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+    <div class="table-responsive">
+        <table class="table align-middle table-bordered" id="myTable">
+            <!-- tablr headers -->
+            <thead class="table-dark text-light">
+                <th>BookingID</th>
+                <th>Booking Date</th>
+                <th>Movie Name</th>
+                <th>Ticket</th>
+                <th>Seats</th>
+                <th>Session</th>
+                <th>Cinema</th>
+                <th>Total Amount</th>
+                <th>Payment Amount</th>
+                <th>Print Ticket</th>
+            </thead>
+            
+            <tbody>
+                {% for booking in bookings %}
+                <tr>
+                    <tr>
+                        <td class="col-md-1" style="font-size: 13px;">{{ booking['bookingid'] }}</td>
+                        <td class="col-md-2" style="font-size: 13px;">{{ booking['booking_date'].strftime('%d/%m/%Y') }}</td>
+                        <td class="col-md-2" style="font-size: 13px;">{{ booking['movie_title'] }}</td>
+                        <td class="col-md-2" style="font-size: 13px;">{{ booking['tickets'] }}</td>
+                        <td class="col-md-2" style="font-size: 13px;">{{ booking['seats'] }}</td>
+                        <td class="col-md-2" style="font-size: 13px;">{{ booking['session_date'].strftime('%d/%m/%Y') }}
+                            {{
+                            booking['sessiontime'] }}
+                        </td>
+                        <td class="col-md-1" style="font-size: 13px;">{{ booking['name'] }}</td>
+                        <td class="col-md-1" style="font-size: 13px;">{{ booking['total_amount'] }}</td>
+                        <td class="col-md-1" style="font-size: 13px;">{{ booking['payment_amount'] }}</td>
+                        <td class="col-md-2" style="font-size: 13px;">
+                            {% if booking['is_available'] == 1 %}
+                            <a type="button" target="_blank" class="btn btn-warning" href="{{ url_for('booking.ticket_preview', bookingid = booking['bookingid']) }}">Print</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</div>
+
+<!-- <script>
+    function myFunction() {
+      // Declare variables
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("myTable");
+      tr = table.getElementsByTagName("tr");
+    
+      // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+        td1 = tr[i].getElementsByTagName("td")[2];
+        td2 = tr[i].getElementsByTagName("td")[3];
+        td5 = tr[i].getElementsByTagName("td")[4];
+
+        if (td1 || td2 || td5) {
+            txtValue1 = td1.textContent || td1.innerText;
+            txtValue2 = td2.textContent || td2.innerText;
+            txtValue5 = td5.textContent || td5.innerText;
+
+            if (txtValue1.toUpperCase().indexOf(filter) > -1 || 
+                txtValue2.toUpperCase().indexOf(filter) > -1 ||
+                txtValue5.toUpperCase().indexOf(filter) > -1 
+            ){
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+    }
+    </script>
+
+<script>
+    function ClearFields() {
+
+document.getElementById("myInput").value = "";
+
+}
+</script> -->
+
+{% endblock %}

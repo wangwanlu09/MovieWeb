@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}SEARCH RESULTS{% endblock %}
+{% block head %}
+<style>
+  .profile-picture {
+    max-width: 40px;
+    height: auto;
+    border-radius: 50%;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  body,
+  html {
+    height: 100%;
+    margin: 0;
+    overflow: auto;
+    background-color: black;
+  }
+
+  .profile-picture {
+    max-width: 40px;
+    height: auto;
+    border-radius: 50%;
+  }
+
+  .rating {
+    display: inline-block;
+    min-width: 30px;
+    height: 30px;
+    border: 1px solid white;
+    font-size: 18px;
+    margin: 3px;
+    text-align: center;
+    line-height: 30px;
+    padding: 0px 5px;
+    vertical-align: bottom;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    text-shadow: none !important;
+    box-sizing: content-box !important;
+    margin-bottom: 0.5em;
+  }
+</style>
+{% endblock %}
+
+
+{% block content %}
+<!---jinja extension(base navbar)--->
+<div class="container d-flex justify-content-end mt-5"
+  style="color:white; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">
+  <h1>SEARCH RESULTS</h1>
+</div>
+<!---delet layout-->
+{% for search_result in search_results %}
+<div class="container d-flex flex-column justify-content-center">
+  <div class="card mb-4" style="max-width: 1000px; background-color: transparent;">
+    <div class="row g-0">
+      <div class="col-md-3">
+        <a href="#"><img src="{{ search_result['image_url'] }}"
+            class="img-fluid rounded-start" alt="search_result1" style="width: 180px; height:auto"></a>
+      </div>
+      <div class="col-md-8">
+        <div class="card-body bg-transparent text-white">
+          <h5 class="card-title"><span style="font-weight: bold;">{{ search_result['title'] }}</span></h5>
+          <!-- <div class="mb-2"
+            style="background-color:{{ search_result['color'] }}; height: 25px; width: 25px; border-radius: 50%">
+            <p style="font-weight: bold; font-size: medium; color:black; margin: 0; text-align: center">{{
+              search_result['rating_code'] }}</p>
+          </div> -->
+          <div class="mb-2 rating" style="background-color:{{ search_result['color'] }};">
+            <p style="font-weight: bold; font-size: medium; color:black; margin: 0; text-align: center">{{
+              search_result['rating_code'] }}</p>
+          </div>
+          <span style="font-weight: bold; font-size: small; color:gray">{{ search_result['runtime'] }}m | {{
+            search_result['genre_name'] }}</span>
+          <p style="font-weight: bold; font-size: large">
+            <br>
+            Release date:{{ search_result['release_date'].strftime('%d/%m/%Y') }}
+          </p>
+          <p class="card-text mb-5" style="font-weight: 50;"><span
+              style="font-weight: bold; font-size: 25px;">"</span>{{ search_result['descriptions'] }}<span
+              style="font-weight: bold; font-size: 25px;">"</span></p>
+          <div>
+
+            <p style="font-weight: 50;"><b>Starring: </b>{{ search_result['starring'] }}</p>
+
+          </div>
+          {% if search_result.min_session_date %}
+          <div class="d-flex">
+            <button type="submit" class="btn btn-outline-light btn-light btn-dark"><a
+                href="/details/movie?movieid={{ search_result['movieid'] }}"
+                style="text-decoration: none; color: inherit;">Book Now</a></button>
+          </div>
+          {% else %}
+          <p><b>No sessions available</b></p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container d-flex mb-4" style="border-top: 1px solid gray;"></div>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "navdash_admin.html" %}
+{% block title %}Edit Cinema Names{% endblock %}
+{% block content %}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="personal-card text-left">
+                <!-- Use Jinja -->
+          <div class="modal-body mt-2">
+            <form action="{{ url_for('manage_settings.setting_cinema_name_update') }}" method="post">
+              <div class="modal-header">
+                <h5 class="modal-title" id="changePromotionModal" style="color:grey; font-weight: bold;">Edit Cinema Name</h5>
+              </div>
+              <div class="mb-3">
+                <label for="cinemaid" class="form-label" style="color:grey">Cinema ID:{{ cinema['cinemaid'] }}</label>
+                <input type="text" class="form-control mb-2" id="cinemaid" disabled value="{{ cinema['cinemaid'] }}"> 
+                <input type="hidden" class="form-control mb-2" id="cinemaid"  value="{{ cinema['cinemaid'] }}" name="cinemaid">
+  
+                <label for="cinema_name" class="form-label" style="color:grey">Cinema Name:</label>
+                <input type="text" class="form-control mb-2" name="cinema_name" value="{{ cinema['name'] }}" required maxlength="20" pattern="^[0-9a-zA-Z ]{1,20}$" title="Only letters, space, and numbers are allowed. 20 letters maximum">              
+          </div>
+          <div class="modal-footer container d-flex justify-content-between">
+            <div><a role="button" class="btn btn-success mx-2" href="{{ url_for('manage_settings.setting_cinema_names') }}">Back</a></div>
+            <div><button type="button" class="btn btn-secondary mx-2" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-dark">Save Changes</button></div>
+          </div>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<style>
+    body{
+      background-color: #ddd;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+   .personal-card {
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      position: relative;
+  }
+  
+  .personal-card {
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      position: relative;
+  }
+</style>
+
+{% endblock %}

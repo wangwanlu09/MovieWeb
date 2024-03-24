@@ -1,0 +1,97 @@
+{% extends "navdash_admin.html" %}
+{% block title %}Messages{% endblock %}
+{% block content %}
+
+<div class="container d-flex justify-content-end mt-5" style="font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">
+    <h1>MESSAGES</h1>
+</div>
+  <div class="container d-flex">
+    <div class="input-group mb-3">
+        <label for="allGenres"></label>
+        <input type="text" id="myInput" onkeyup="myFunction()" class="form-control border-secondary" placeholder="Search">
+    <div>
+        <button type="submit" class="btn btn-secondary"><i class="bi bi-search"></i></button>
+        <button type="submit" class="btn btn-dark"><a href="#" class="text-decoration-none text-white"style="font-size: 13px;" onclick="ClearFields();">Cancel</a></button>
+    </div>
+    </div>
+  </div>
+
+<div class="container d-flex">
+<div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+    <div class="table-responsive">
+        <table class="table align-middle table-bordered" id="myTable">
+        <thead class="table-dark text-light">
+        <th>Message ID</th>
+        <th>Sender Name</th>
+        <th>Email</th>
+        <th>Sent At</th>
+        <th>Message</th>
+        
+        </thead>
+        <tbody>
+        {% for m in messages %}
+        <tr>
+          <td >{{ m['sendid'] }}</td>
+          <td >{{ m['fullname'] }}</td>
+          <td >{{ m['email'] }}</td>
+          <td >{{ m['send_datetime'].strftime('%d/%m/%Y %H:%M:%S') }}</td>    
+          <td >{{ m['message'] }}</td>   
+          </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+    </div>
+</div>
+</div>
+
+<script>
+  function myFunction() {
+    // Declare variables
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("tr");
+  
+    // Loop through all table rows, and hide those who don't match the search query
+      for (i = 0; i < tr.length; i++) {
+      td1 = tr[i].getElementsByTagName("td")[1];
+      td2 = tr[i].getElementsByTagName("td")[2];
+      td3 = tr[i].getElementsByTagName("td")[3];
+      td4 = tr[i].getElementsByTagName("td")[4];
+
+
+      if (td1 || td2 || td3 || td4) {
+          txtValue1 = td1.textContent || td1.innerText;
+          txtValue2 = td2.textContent || td2.innerText;
+          txtValue3 = td3.textContent || td3.innerText;
+          txtValue4 = td4.textContent || td4.innerText;
+
+
+          if (txtValue1.toUpperCase().indexOf(filter) > -1 ||
+            txtValue2.toUpperCase().indexOf(filter) > -1 ||
+            txtValue3.toUpperCase().indexOf(filter) > -1 ||
+            txtValue4.toUpperCase().indexOf(filter) > -1 
+          ){
+              tr[i].style.display = "";
+          } else {
+              tr[i].style.display = "none";
+          }
+      }
+  }
+  }
+  </script>
+
+<script>
+function ClearFields() {
+
+  document.getElementById("myInput").value = "";
+  var table = document.getElementById("myTable");
+  var tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    tr[i].style.display = "";
+  }
+}
+</script>
+
+{% endblock %}

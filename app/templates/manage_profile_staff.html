@@ -1,0 +1,81 @@
+{% if session['role'] == 'manager' %}
+{% extends "navdash_manager.html" %}
+{% elif session['role'] == 'admin' %}
+{% extends "navdash_admin.html" %}
+{% else %}
+{% extends "navdash_staff.html" %}
+{% endif %}
+
+{% block title %}Edit Profile{% endblock %}
+{% block content %}
+  <div class="container mt-5">
+  <div class="row justify-content-center">
+      <div class="col-md-8">
+          <div class="personal-card text-left">
+              <!-- Use Jinja -->
+        <div class="modal-body mt-2">
+          <form action="{{url_for('staff_login.staff_profile_update')}}" method="POST">
+            <div class="mb-3">
+              <label for="roleInfo" class="form-label" style="color:grey">Role Info:</label>
+              <input type="text" class="form-control mb-2" id="roleInfo" name="roleInfo" value="{{session['role'] | capitalize }}" disabled>
+              
+            
+              <label for="email" class="form-label" style="color:grey">Email:</label>
+              <input type="email" class="form-control mb-2" id="email" name="email" value="{{account['email']}}" disabled>
+          
+                        
+              <label for="firstName" class="form-label" style="color:grey">First Name:</label>
+              <input type="text" class="form-control mb-2" id="firstName" name="firstName" value="{{account['firstname']}}" required pattern="^[a-zA-Z]{1,25}$" maxlength="25" title="Letters only">
+
+              <label for="lastName" class="form-label" style="color:grey">Last Name:</label>
+              <input type="text" class="form-control " id="lastName" name="lastName" value="{{account['lastname']}}"  required pattern="^[a-zA-Z]{1,25}$" maxlength="25" title="Letters only">
+
+              <label for="phone" class="form-label" style="color:grey">Phone:</label>
+              <input type="tel" class="form-control mb-2" id="phone" name="phone" value="{{account['phone']}}" required pattern="[0-9]{9,11}" title="9 - 11 digits">
+     
+          </div>
+          <div class="modal-footer container d-flex justify-content-between">
+            {% if session['role'] == 'manager' %}
+            <div><a href="{{url_for('staff_login.manager_profile')}}" class="btn btn-success mx-2">Back</a></div>
+            {% elif session['role'] == 'admin' %}
+            <div><a href="{{url_for('staff_login.admin_profile')}}" class="btn btn-success mx-2">Back</a></div>
+            {% else %}
+            <div><a href="{{url_for('staff_login.staff_profile')}}" class="btn btn-success mx-2">Back</a></div>
+            {% endif %}
+            
+            <div>
+                <button type="button" class="btn btn-secondary mx-2" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-dark">Save Changes</button>
+            </div>
+          </div>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--css part -->
+<style>
+  body{
+    background-color: #ddd;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+ .personal-card {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.personal-card {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+</style>
+
+{% endblock %}

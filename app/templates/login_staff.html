@@ -1,0 +1,36 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/log_style.css') }}" />
+    <title>Login</title>
+  </head>
+  <body>  -->
+{% extends "login,register_navbar.html" %}
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/log_style.css') }}" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+{% endblock %}
+{% block content %}
+    <form action="{{ url_for('staff_login.staffcheck') }}" method="post">
+      <div class="login">
+        <div>
+          <p class="title">Staff Log In</p>
+          <label for='Username/Email'>Username (Email): </label>
+          <input placeholder="Username (Email)" required name="username" />
+          <label for='password'>Password: </label>
+          <input placeholder="Password" type="password" required name="password" />
+          <button class="loader">Sign in</button>
+          <div><p>Not a staff ?  <a style="font-size: inherit;color:rgb(11, 108, 182)" href="{{ url_for('customer_login.customerlogin') }}"><strong>Customer login here</strong></a></p></div>
+        </div>
+        <!--image change new path -->
+        <img src="{{ url_for('static', filename='images/login_staff.jpg') }}" alt="picture"></div>
+      </div> 
+      
+  </form>
+  
+  <!-- </body>
+</html> -->
+{% endblock %}

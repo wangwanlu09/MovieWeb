@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+{% block title %}Promotion{% endblock %}
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/log_style.css') }}" />
+<style>
+        body, html {
+        height: 100%;
+        margin: 0;
+        overflow: auto;
+        background-color: black;
+      }
+      .rating {
+        display: inline-block;
+    min-width: 30px;
+    height: 30px;
+    border: 1px solid white;
+    font-size: 18px;
+    margin: 3px;
+    text-align: center;
+    line-height: 30px;
+    padding: 0px 5px;
+    vertical-align: bottom;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    text-shadow: none !important;
+    box-sizing: content-box !important;
+    margin-bottom: 0.5em;
+      }
+</style>
+{% endblock %}
+{% block content %}
+
+<div class="container d-flex justify-content-center mt-5 mb-4" style="color:rgb(0, 0, 0); font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">
+    <!----jinja change name-->
+    <h1 style="color: white;">{{ promotion['title'] }}</h1>
+  </div>
+   <!----jinja---->
+  <div class="container" style="width: 20rem;" >
+    <img src="{{ promotion['image'] }}" class="card-img-top" alt="Promotion image">
+</div>
+
+<div class="container d-flex mb-3 mt-4" style="border-top: 1px solid gray;"></div> 
+
+<div class="container mt-5 text-light">
+    <h5>{{ promotion['descriptions'] }}</h5>
+</div>
+<div class="container mt-2 text-light">
+<div> 
+    <p></p>
+    {{ promotion['details'] }} 
+    <p></p>
+</div>
+{% if promotion['promotion_type_id'] == 2 %}
+<div class="text-light">
+    Movies Showing From: {{ promotion['effective_date'].strftime('%d/%m/%Y %I:%M %p') }}
+</div>
+<div class="text-light">
+    Movies Showing To: {{ promotion['expiration_date'].strftime('%d/%m/%Y %I:%M %p') }}
+</div>
+<br>
+<div class="text-light">
+   Promotion Code: <strong>{{ promotion['promotion_code'] }}</strong>
+</div>
+<div class="text-light">
+    Please use this code at checkout
+ </div>
+ {% elif promotion['promotion_type_id'] == 3 %}
+ <div class="text-light">
+    Effective: {{ promotion['effective_date'].strftime('%d/%m/%Y %I:%M %p') }}
+</div>
+<div class="text-light">
+    Expiration: {{ promotion['expiration_date'].strftime('%d/%m/%Y %I:%M %p') }}
+</div>
+{% endif %}
+</div>
+<div class="container d-flex mb-3 mt-4" style="border-top: 1px solid gray;"></div> 
+{% if tickets != None %}
+
+{% if promotion['promotion_type_id'] == 2 %}
+<div class="container d-flex justify-content-between mb-4">
+    <table class="table table-borderless table-dark">
+        <thead>
+            <th class="text-light">Ticket</th>
+            <th class="text-light">Original Price</th>
+            <th class="text-light">Discounted Price</th>
+            <th class="text-light">Percentage Off</th>
+            <!-- <th class="text-light">Now Save</th> -->
+        </thead>
+        <tbody>
+            {% for t in tickets %}
+            <tr>
+                <td scope="col" class="text-light">{{t['ticket_type'] | capitalize }}</td>
+                <td scope="col" class="text-light" style="text-decoration: line-through; ">{{ "%.2f"|format(t['price'])}}</td>
+                <td scope="col" class="h5 text-danger" >{{ "%.2f"|format(t['discounted_price']) }}</td>
+                <td scope="col" class="h5 text-danger">{{ "%.2f"|format(t['discount_percentage']) }}%</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div> 
+
+<p></p>
+<div class="container d-flex mb-3 mt-4" style="border-top: 1px solid gray;"></div> 
+{% endif %}
+{% endif %}
+<div class="container d-flex justify-content-end md-3">
+    <a type="button" class="btn btn-outline-light btn-light btn-dark" href="{{ url_for('promotions.promotion_home') }}">Back</a>
+    <!-- {% if promotion['promotion_type_id'] == 2 %}
+    <a role="button" href="{{ url_for('home.movies') }}" class="text-decoration-none text-dark fs-5 fw-bold btn btn-outline-dark btn-light position-relative mx-3">Book Now</a>
+    {% endif %} -->
+</div>
+
+</div>
+{% if promotion['promotion_type_id'] in (1,2) %}
+<br>
+{% for movie in movies %}
+  <div class="container d-flex flex-column justify-content-center">
+    <div class="card mb-4" style="max-width: 1000px; background-color: transparent;">
+        <div class="row g-0">
+            <div class="col-md-3">
+                <a href="/details/movie?movieid={{ movie['movieid'] }}"><img src="{{ movie['image_url'] }}" class="img-fluid rounded-start" alt="Movie1" style="width: 180px; height:auto"></a>
+            </div>
+            <div class="col-md-8">
+                <div class="card-body bg-transparent text-white">
+                    <h5 class="card-title"><span style="font-weight: bold;">{{ movie['title'] }}</span></h5>
+                    <div class="mb-2 rating" style="background-color:{{ movie['color'] }};"><p style="font-weight: bold; font-size: medium; color:black; margin: 0; text-align: center">{{ movie['rating_code'] }}</p></div>
+                    <span style="font-weight: bold; font-size: small; color:gray">{{ movie['runtime'] }}m | {{ movie['genre_name'] }}</span>
+                    <p class="card-text mb-5" style="font-weight: 50;"><span style="font-weight: bold; font-size: 25px;">"</span>{{ movie['descriptions'] }}<span style="font-weight: bold; font-size: 25px;">"</span></p>
+
+                    <div class="container d-flex" id="sessionContainer">
+
+                      <!-- <button type="button" class="btn btn-outline-light btn-light btn-dark"><a href="/details/movie?movieid={{ movie['movieid'] }}" style="text-decoration: none; color: inherit;">Book Now</a></button> -->
+                      {% for s in tueSessions %}
+                      {% if s['movieid'] == movie['movieid'] %}
+                      <button type="button" class="btn btn-outline-light btn-light btn-dark mx-2"><a href="{{url_for('booking.select_tickets', movieid=movie['movieid'],sessionid=s['sessionid'] )}}" style="text-decoration: none; color: inherit;"> 
+                        {{ s['session_date'].strftime('%d/%m') }} {{ s['session12hours'] }}</a></button>
+                      {% endif %}
+                      {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+  <div class="container d-flex mb-4" style="border-top: 1px solid gray;"></div>
+  {% endfor %}
+  {% endif %}
+{% endblock %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('{{ format_time }}').click();
+    });
+    function loadData(month) {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                document.getElementById('sessionContainer').innerHTML = xhr.responseText;
+            }
+        };
+
+        xhr.open('GET', `/TuesdaySesstion?movieid={{ movie['movieid'] }}&fromTue={{fromTue}}&toTue={{toTue}}`, true);
+        xhr.send();
+    }
+</script>

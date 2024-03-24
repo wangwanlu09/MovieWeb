@@ -1,0 +1,110 @@
+{% extends "navdash_customer.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+<div class="card text-center ">
+    <div class="card-header">
+      <strong>MY DASHBOARD</strong> 
+    </div>
+    <div class="card-body">
+      <h2 class="card-title">Welcome Back {{ firstname['firstname'] }}!</h2>
+      <!-- <p class="card-text">Welcome Back! Are you looking for the following functions?</p>
+      <a href="#" class="btn btn-dark mx-1">Function 1 </a>
+      <a href="#" class="btn btn-dark mx-1">Function 2</a> -->
+    </div>
+    <div class="card-footer text-body-secondary" id="current_date">
+        
+    </div>
+  </div>
+  <div class="container d-flex justify-content-center">
+    <div class="card mt-5 container mx-2" style="box-shadow: 0px 4px 8px 0px rgba(70, 70, 70, 0.2); width: 500px;">
+        <div class="card-header">
+          My Account
+        </div>
+        <div class="card-body">
+            <div>
+                <h4 class="card-title">ACCOUNT DETAILS</h4>
+                <p></p>
+                
+            </div>
+          <br>
+          <div><span class="fw-bold mx-2">Name:</span>{{ firstname['firstname'] }} {{ firstname['lastname'] }} </div>
+          <div><span class="fw-bold mx-2">Phone:</span>{{ firstname['phone'] }} </div>
+          <div><span class="fw-bold mx-2">Email:</span>{{ firstname['email'] }} </div>
+          <a href="{{ url_for('customer_login.customer_profile') }}" class="btn btn-dark mt-3">View My Profile</a>
+        </div>
+      </div>
+    <div class="card mt-5 container mx-2" style="box-shadow: 0px 4px 8px 0px rgba(70, 70, 70, 0.2); width: 500px;">
+      <div class="card-header">
+        Bookings
+      </div>
+      <div class="card-body">
+        <div>
+            <h4 class="card-title">BOOKING HISTORY</h4> <p class="text-muted" >(Most Recent Purchase)</p>
+        </div>
+        
+        <div>
+            <span class="fw-bold mx-2">Title:</span>
+            {% if booking %}
+            {{ booking['title'] }}
+            {% endif %}
+        </div>
+        <div><span class="fw-bold mx-2">Booking Date:</span>
+            {% if booking %}
+            {{ booking['booking_date'].strftime('%d/%m/%Y') }}
+            {% endif %}
+        </div>
+        <div><span class="fw-bold mx-2">Session Datetime:</span>
+            {% if booking %}
+            {{ booking['session_date'].strftime('%d/%m/%Y') }} {{ booking['sessiontime'] }}
+            {% endif %}
+        </div>
+        <a href="{{ url_for('booking.booking_history') }}" class="btn btn-dark mt-3">View all</a>
+      </div>
+    </div>
+
+  <div class="card mt-5 container mx-2" style="box-shadow: 0px 4px 8px 0px rgba(70, 70, 70, 0.2); width: 500px;">
+    <div class="card-header">
+      GiftCards
+    </div>
+    <div class="card-body">
+        <div>
+            <h4 class="card-title">GIFTCARD PURCHASE HISTORY</h4> <p class="text-muted" >(Most Recent Purchase)</p>
+        </div>
+      <div><span class="fw-bold mx-2">Giftcard Type:</span>
+        {% if giftcard %}
+        {{ giftcard['giftcard_name'] }}
+        {% endif %}
+    </div>
+      <div><span class="fw-bold mx-2">Payment Date:</span>
+        {% if giftcard %}
+        {{ giftcard['payment_date'].strftime('%d/%m/%Y') }}
+        {% endif %}
+    </div>
+      <div><span class="fw-bold mx-2">Balance:</span>
+        {% if giftcard %}
+        {{ giftcard['balance'] }}
+        {% endif %}
+    </div>
+      <a href="{{ url_for('giftcards.giftcard_customer') }}" class="btn btn-dark mt-3">View all</a>
+    </div>
+  </div>
+
+  
+ 
+  </div>
+
+<script>
+    const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const monthNames = ["Jan", "Feb", "Mar", "Apr",
+            "May", "Jun", "Jul", "Aug",
+            "Sep", "Oct", "Nov", "Dec"];
+    const date = new Date();
+    const dayName = daysOfWeek[date.getDay()];
+    const day = date.getDate();
+    const monthIndex = date.getMonth();
+    const monthName = monthNames[monthIndex];
+    const year = date.getFullYear();
+    document.getElementById("current_date").innerHTML = `${dayName}, ${day} ${monthName} ${year}`;
+</script>
+{% endblock %}

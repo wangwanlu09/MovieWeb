@@ -1,0 +1,138 @@
+{% if session['role'] == 'manager' %}
+{% extends "navdash_manager.html" %}
+{% elif session['role'] == 'admin' %}
+{% extends "navdash_admin.html" %}
+{% endif %}
+{% block title %}Report Overview{% endblock %}
+
+{% block header %}
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/report.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+  <div class="grid-container">
+
+
+    <!-- Sidebar -->
+    <aside id="sidebar">
+      <div class="sidebar-title">
+        <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
+      </div>
+
+      <ul class="sidebar-list">
+        <li class="sidebar-list-item">
+          <a href="{{ url_for('reports.report_overview') }}" >
+            <span class="material-icons-outlined">dashboard</span> Overview
+          </a>
+        </li>
+        <li class="sidebar-list-item">
+          <a href="{{ url_for('reports.report_sales') }}" >
+            <span class="material-icons-outlined">poll</span> Sales      
+          </a>
+        </li>
+        <!-- <li class="sidebar-list-item">
+          <a href="#" target="_blank">
+            <span class="material-icons-outlined">category</span> Categories
+          </a>
+        </li> -->
+        <li class="sidebar-list-item">
+          <a href="{{ url_for('reports.report_customers') }}">
+            <span class="material-icons-outlined">groups</span> Customers
+          </a>
+        </li>
+        <!-- <li class="sidebar-list-item">
+          <a href="#" target="_blank">
+            <span class="material-icons-outlined">fact_check</span> Inventory
+          </a>
+        </li>
+        <li class="sidebar-list-item">
+          <a href="#" target="_blank">
+            <span class="material-icons-outlined">poll</span> Reports
+          </a>
+        </li>
+        <li class="sidebar-list-item">
+          <a href="#" target="_blank">
+            <span class="material-icons-outlined">settings</span> Settings
+          </a>
+        </li> -->
+      </ul>
+    </aside>
+    <!-- End Sidebar -->
+
+    <!-- Main -->
+
+    <main class="main-container">
+      <div class="container d-flex justify-content-end mt-5" style="color:white; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">
+        <h1>OVERVIEW - Last 30 Days</h1>
+        <!-- <h3> (Last 30 Days)</h3> -->
+    </div>
+        <div class="main-cards">
+          <div class="card" style="color:white">
+            <div class="card-inner">
+              <h3>TOTAL SALES</h3>
+              <span class="material-icons-outlined">inventory_2</span>
+            </div>
+            <h1>${{ticketsales_amt}}</h1>
+          </div>
+
+          <div class="card" style="color:white">
+            <div class="card-inner">
+              <h3>NUMBER OF TICKETS</h3>
+              <span class="material-icons-outlined">category</span>
+            </div>
+            <h1>{{ticketsales_num}} <small>Sold</small></h1>
+          </div>
+
+          <div class="card" style="color:white">
+            <div class="card-inner">
+              <h3>NEW CUSTOMERS</h3>
+              <span class="material-icons-outlined">groups</span>
+            </div>
+            <h1>{{newcustomers}}</h1>
+          </div>
+
+          <div class="card" style="color:white">
+            <div class="card-inner">
+              <h3>GIFTCARD SALES</h3>
+              <span class="material-icons-outlined">notification_important</span>
+            </div>
+            <h1>${{giftcard_num }}</h1>
+          </div>
+
+        </div>
+
+        <div class="charts">
+
+          <div class="charts-card">
+            <h2 class="chart-title">Top 5 Movies (Last 30 Days)</h2>
+            <div id="bar-chart"></div>
+          </div>
+          <div class="charts-card">
+            <h2 class="chart-title">Ticket Sales (Last 30 Days)</h2>
+            <div id="area-chart"></div>
+          </div>
+
+        </div>
+
+        </div>
+        
+      </main>
+      <!-- <div style="color: white;">{{paymentamt}}</div> -->
+      
+<script>
+  var categoriesNames = {{ top5names | safe }};
+  var categoriesValues = {{ top5values | safe }};
+  var salesWeekChart = {{ salesWeek | safe }};
+  var salesValueChart = {{ salesValue | safe }};
+  // var ticketcountChart = {{ ticketcount | safe }};
+  var paymentamtChart = {{ paymentamt | safe }};
+</script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.35.5/apexcharts.min.js"></script>
+    <script src="{{ url_for('static', filename='js/report.js') }}"></script>
+
+{% endblock %}

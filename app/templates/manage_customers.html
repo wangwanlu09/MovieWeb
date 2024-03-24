@@ -1,0 +1,201 @@
+{% if session['role'] == 'manager' %}
+{% extends "navdash_manager.html" %}
+{% elif session['role'] == 'admin' %}
+{% extends "navdash_admin.html" %}
+{% else %}
+{% extends "navdash_staff.html" %}
+{% endif %}
+{% block title %}Customers List{% endblock %}
+
+{% block content %}
+
+<div class="container d-flex justify-content-end mt-5"
+    style="font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">
+    <h1>CUSTOMERS MANAGEMENT</h1>
+</div>
+
+<div class="container d-flex">
+    <div class="input-group mb-3">
+        <label for="allMovies"></label>
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for customers (firstname, lastname)"
+            class="form-control border-secondary">
+        <div>
+            <button type="submit" class="btn btn-secondary"><i class="bi bi-search"></i></button>
+            <button type="submit" class="btn btn-dark"><a href="#" class="text-decoration-none text-white"
+                    style="font-size: 13px;" onclick="ClearFields();">Cancel</a></button>
+            <!--             {% if session['role'] in ['admin', 'manager'] %}
+            <a href="{{ url_for('manage_customers.customers_add') }}" role="button" style="font-size:13px;"
+                class="btn btn-outline-dark mx-2">
+                <i class="bi bi-pencil-square"></i>Add CUSTOMERS
+            </a>
+            {% endif %}
+-->
+        </div>
+
+    </div>
+</div>
+
+<!-- table: all the movies -->
+<form method="POST" action="{{ url_for('manage_customers.manage_customer')}}" id="myForm"></form>
+<div class="d-flex justify-content-center container">
+    <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+        <div class="table-responsive">
+            <table class="table align-middle table-bordered" id="myTable">
+                <!-- tablr headers -->
+                <thead class="table-dark text-light text-center">
+                    <th>Customers ID</th>
+                    <th>First name</th>
+                    <th>Last Name</th>
+                    <th>Email address</th>
+                    <th>Phone</th>
+                    <th>Status</th>
+                    {% if session['role'] in ['admin', 'manager'] %}
+                    <th>Edit</th>
+
+                    {% endif %}
+                </thead>
+                <tbody>
+                    {% for customers_information in customers_informations %}
+                    <tr>
+                        <td class="col-md-2" style="font-size: 13px;">{{ customers_information['customerid'] }}</td>
+                        <td class="col-md-2" style="font-size: 13px;">{{ customers_information['firstname'] }}</td>
+                        <td class="col-md-2" style="font-size: 13px;">{{ customers_information['lastname'] }}</td>
+                        <td class="col-md-1" style="font-size: 13px;">{{ customers_information['email'] }}</td>
+                        <td class="col-md-1" style="font-size: 13px;">{{ customers_information['phone'] }}</td>
+                        <td class="col-md-2" style="font-size: 13px;">
+                            {% if customers_information['is_active'] == '1' %}
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" name="flexSwitchCheckDefault"
+                                    role="switch" value="Active"
+                                    id="flexSwitchCheckDefault{{ customers_information['customerid'] }}" checked
+                                    onchange="toggleSwitch('{{ customers_information['customerid'] }}', 'Active')">
+                                <label class="form-check-label"
+                                    for="flexSwitchCheckDefault{{ customers_information['customerid'] }}">Deactivate</label>
+                            </div>
+                            {% elif customers_information['is_active'] == '0' %}
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" name="flexSwitchCheckDefault"
+                                    role="switch" value="Inactive"
+                                    id="flexSwitchCheckDefault{{ customers_information['customerid'] }}"
+                                    onchange="toggleSwitch('{{ customers_information['customerid'] }}', 'Inactive')">
+                                <label class="form-check-label"
+                                    for="flexSwitchCheckDefault{{ customers_information['customerid'] }}">Activate</label>
+                            </div>
+                            {% else %}
+                            {% endif %}
+
+                        </td>
+                        {% if session['role'] in ['admin', 'manager'] %}
+                        <td><a type="button" class="btn btn-danger mt-2" style="font-size: 10px;" role="button"
+                                href="/edit/customers?customerid={{ customers_information['customerid'] }}"><i
+                                    class="bi bi-pencil-square"></i> Edit</a></td>
+                        <!--
+                        <td>
+                            
+                            <button type="button" class="btn btn-warning mt-2" style="font-size: 10px;"
+                                data-bs-toggle="modal" data-bs-target="#exampleStaff{{ customers_information['customerid'] }}">Deactivate</button>
+                            <div class="modal fade" id="exampleStaff{{ customers_information['customerid'] }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm Deletion</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Are you sure you want to delete customers <span style="color: blue;">{{
+                                            customers_information['customerid'] }} - {{
+                                            customers_information['firstname'] }}{{
+                                            customers_information['lastname'] }}?</span>
+                                            </p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                            <a type="button" class="btn btn-warning" 
+                                            href="/delete/customers?customerid={{ customers_information['customerid'] }}"
+                                                id="exampleStaff{{ customers_information['customerid'] }}">Delete</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </td>
+                        -->
+                        {% endif %}
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    function toggleSwitch(customerId, statusValue) {
+        // Create a hidden input to include managerId and value in the form data
+        var hiddenInput = document.createElement("input");
+        hiddenInput.setAttribute("type", "hidden");
+        hiddenInput.setAttribute("name", "customerId");
+        hiddenInput.setAttribute("value", customerId);
+        document.getElementById("myForm").appendChild(hiddenInput);
+
+        hiddenInput = document.createElement("input");
+        hiddenInput.setAttribute("type", "hidden");
+        hiddenInput.setAttribute("name", "statusValue");
+        hiddenInput.setAttribute("value", statusValue);
+        document.getElementById("myForm").appendChild(hiddenInput);
+
+        document.querySelector('form').submit();
+    }
+</script>
+</form>
+
+
+
+<script>
+    function myFunction() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td1 = tr[i].getElementsByTagName("td")[2];
+            td2 = tr[i].getElementsByTagName("td")[3];
+            td5 = tr[i].getElementsByTagName("td")[4];
+
+            if (td1 || td2 || td5) {
+                txtValue1 = td1.textContent || td1.innerText;
+                txtValue2 = td2.textContent || td2.innerText;
+                txtValue5 = td5.textContent || td5.innerText;
+
+                if (txtValue1.toUpperCase().indexOf(filter) > -1 ||
+                    txtValue2.toUpperCase().indexOf(filter) > -1 ||
+                    txtValue5.toUpperCase().indexOf(filter) > -1
+                ) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    function ClearFields() {
+        document.getElementById("myInput").value = "";
+        var table = document.getElementById("myTable");
+        var tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            tr[i].style.display = "";
+        }
+    }
+</script>
+
+{% endblock %}

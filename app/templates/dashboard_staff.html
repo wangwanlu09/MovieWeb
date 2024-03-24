@@ -1,0 +1,70 @@
+{% extends "navdash_staff.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+<div class="card text-center ">
+    <div class="card-header">
+      <strong>MY DASHBOARD</strong>
+    </div>
+    <div class="card-body">
+      <h2 class="card-title">Welcome Back {{ firstname['firstname'] }}!</h2>
+    </div>
+    <div class="card-footer text-body-secondary" id="current_date">
+      
+    </div>
+  </div>
+  <div class="container d-flex justify-content-center">
+    <div class="card mt-5 container mx-2" style="box-shadow: 0px 4px 8px 0px rgba(70, 70, 70, 0.2); width: 500px;">
+      <div class="card-header">
+        My Account
+      </div>
+      <div class="card-body">
+        <h4 class="card-title">ACCOUNT</h4>
+        <div><span class="fw-bold mx-2">Name:</span>{{ firstname['firstname'] }} {{ firstname['lastname'] }}</div>
+        <div><span class="fw-bold mx-2">Join Date:</span>{{ firstname['join_date'].strftime('%d/%m/%Y') }}</div>
+        <div><span class="fw-bold mx-2">Phone:</span>{{ firstname['phone'] }}</div>
+        <a href="{{ url_for('staff_login.staff_profile') }}" class="btn btn-dark mt-3">View My Account</a>
+      </div>
+    </div>
+
+  <div class="card mt-5 container mx-2" style="box-shadow: 0px 4px 8px 0px rgba(70, 70, 70, 0.2); width: 500px;">
+    <div class="card-header">
+        Customer Checkin
+    </div>
+    <div class="card-body">
+      <h4 class="card-title">Upcoming Session</h4>
+      <div><span class="fw-bold mx-2">Title:</span>{{ latestsession['title'] }}</div>
+      <div><span class="fw-bold mx-2">Session Time:</span>{{ latestsession['session12hours'] }}</div>
+      <div><span class="fw-bold mx-2">Cinema:</span>{{ latestsession['name'] }}</div>
+      <a href="{{ url_for('checkIn.session_checkin') }}" class="btn btn-dark mt-3">View all</a>
+    </div>
+  </div>
+
+  <!-- <div class="card mt-5 container mx-2" style="box-shadow: 0px 4px 8px 0px rgba(70, 70, 70, 0.2); width: 500px;">
+    <div class="card-header">
+      GiftCards
+    </div>
+    <div class="card-body">
+      <h4 class="card-title">Booking GiftCards History</h4>
+      <div><span class="fw-bold mx-2">Title:</span>name</div>
+      <div><span class="fw-bold mx-2">Label:</span>name</div>
+      <div><span class="fw-bold mx-2">Details:</span>name</div>
+      <a href="#" class="btn btn-dark mt-3">View all</a>
+    </div>
+  </div> -->
+ 
+  </div>
+  <script>
+    const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const monthNames = ["Jan", "Feb", "Mar", "Apr",
+            "May", "Jun", "Jul", "Aug",
+            "Sep", "Oct", "Nov", "Dec"];
+    const date = new Date();
+    const dayName = daysOfWeek[date.getDay()];
+    const day = date.getDate();
+    const monthIndex = date.getMonth();
+    const monthName = monthNames[monthIndex];
+    const year = date.getFullYear();
+    document.getElementById("current_date").innerHTML = `${dayName}, ${day} ${monthName} ${year}`;
+</script>
+{% endblock %}

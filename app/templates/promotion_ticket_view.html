@@ -1,0 +1,194 @@
+{% if session['role'] == 'manager' %}
+{% extends "navdash_manager.html" %}
+{% elif session['role'] == 'admin' %}
+{% extends "navdash_admin.html" %}
+{% endif %}
+{% block title %}Ticket Promotions{% endblock %}
+
+{% block content %}
+
+
+
+<div class="container d-flex justify-content-end mt-5" style="font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">
+    <h1>TICKET PROMOTION</h1>
+  </div>
+  <div class="container d-flex">
+    <div class="input-group mb-3">
+        <label for="allPromotions"></label>
+        <input type="text" id="myInput" onkeyup="myFunction()" class="form-control border-secondary" placeholder="Search for ticket type, promotion, or effective date">
+        <div>
+            <button type="submit" class="btn btn-secondary"><i class="bi bi-search"></i></button>
+            <button type="submit" class="btn btn-dark"><a href="#" class="text-decoration-none text-white"style="font-size: 13px;"  onclick="ClearFields();">Cancel</a></button>
+            <button type="submit" class="btn btn-outline-dark mx-2" href="#" data-bs-toggle="modal" data-bs-target="#changePromotionModal" style="font-size:13px;">Add Ticket to Promotion</button>  
+            <a type="button" class="btn btn-outline-dark mx-2" href="{{ url_for('promotions.promotion_view') }}"  style="font-size:13px;">Manage Promotion Campaign</a>
+            <a type="button" class="btn btn-outline-dark mx-2" href="{{ url_for('ticket_price.manage_ticket_prices') }}"  style="font-size:13px;">Manage Tickets</a>
+        </div>
+    </div>
+ </div>
+<!---jinja Add movie(pop up)---> 
+<div class="modal fade" id="changePromotionModal" tabindex="-1" aria-labelledby="changePromotionModal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="changePromotionModal" style="color:grey; font-weight: bold;">Add Ticket Promotion</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body mt-2">
+          <form action="{{ url_for('promotions.promotion_ticket_add') }}" method="post">    
+            <label for="ticketType" class="form-label" style="color:grey">Ticket Type:</label>
+            <select name="ticketType" id="ticketType" class="form-select mb-2" aria-label="Default select example" required>
+              <option value="" disabled selected>Please Choose ticket type(s) to set promotion price</option>
+              <option value="{{ticket_ids}}" style="color: #FFA500;">All Ticket Types</option>
+              {% for t in tickets%}
+              {% if t['is_fixed'] != 1 %}
+              <option value="{{ t['ticketid'] }}">{{ t['ticket_type'] }}</option>
+              {% endif %}
+              {% endfor %}
+            </select>  
+          
+              <div class="modal-footer container d-flex justify-content-between">
+                  <button type="button" class="btn btn-secondary mx-2" data-bs-dismiss="modal">Cancel</button>
+                  <button type="submit" class="btn btn-dark">Next</button>
+              </div>
+          </form>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+    <div class="table-responsive">
+        <table class="table align-middle table-bordered" id="myTable">
+        <thead class="table-dark text-light">
+          <th>TransactionID</th>
+          <th>Ticket Type</th>
+          <th>Discount Type</th>
+          <th>Standard Price</th>
+          <th>Discount Price</th>
+          <th>Promotion Percentage (%)</th>
+          <th>Promotion ID</th>
+          <th>Promotion Name</th>
+          <th>Effective</th>
+          <th>Expiration</th>
+          <th>Version</th>
+          <th>Edit</th>
+          <th>Delete</th>
+        </thead>
+        <tbody>
+        {% for h in history %}
+        <tr>
+            <td class="col-md-1">{{ h['tpid'] }}</td>
+            <td class="col-md-1">{{ h['ticket_type'] }}</td>
+            {% if h['is_percentage'] == 1 %}
+            <td>Percentage</td>
+            {% else %}
+            <td>Discounted Price</td>
+            {% endif %}
+            <td class="col-md-1">{{ h['standard_price'] }}</td>
+            <td class="col-md-1">{{ "%.2f"|format(h['discounted_price']) }}</td>
+            <td class="col-md-1">{{ "%.2f"|format(h['discount_percentage']) }}</td>
+            <td class="col-md-1">{{ h['promotionid'] }}</td>
+            <td class="col-md-2">{{ h['title'] }}</td>
+            <td class="col-md-2">{{ h['effective_date'].strftime('%d/%m/%Y %I:%M %p') }}</td>
+            <td class="col-md-2">{{ h['expiration_date'].strftime('%d/%m/%Y %I:%M %p') }}</td>
+            {% if h['latest_version'] == 1 %}
+            <td class="col-md-2 text-success">{{ h['latest'] }}</td>
+            {% else %}
+            <td class="col-md-2">{{ h['latest'] }}</td>
+            {% endif %}
+            <td class="col-md-2">
+              {% if (h['effective'] - localdate).days >= 0 and h['latest_version'] == 1 %}
+              <a type="button" class="btn btn-danger mt-2" style="font-size: 10px;" href="/promotions/ticket/edit?tpid={{ h['tpid'] }}&ticketid={{ h['ticketid'] }}"><i class="bi bi-pencil-square"></i> Edit </i></a>
+              {% endif %}
+            </td>
+            <!-- <td class="col-md-2"> <button type="submit" class="btn btn-warning mt-2" style="font-size: 10px;">Delete</button></td> -->
+            <td>
+              <!---Delete---> 
+              <button type="button" class="btn btn-warning mt-2" style="font-size: 10px;" data-bs-toggle="modal" data-bs-target="#exampleModal{{ h['tpid'] }}">Delete</button>
+              <div class="modal fade" id="exampleModal{{ h['tpid'] }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm Deletion</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <p>Are you sure you want to remove ticket discount for <span style="color: blue;">{{ h['ticket_type'] }}</span> from promotion <span style="color: blue;">{{ h['title'] }}</span> ? (TransactionID - <span style="color: blue;">{{ h['tpid'] }})</span> </p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <a type="button" class="btn btn-warning" href="/promotions/ticket/delete?id={{ h['tpid'] }}">Delete</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td> 
+        </tr>
+        {% endfor %}
+        </tbody>
+    </div>
+    </div>
+
+    <script>
+        function calculateDiscount() {
+            var originalPrice = 100; // database
+            var discountPercentage = parseFloat(document.getElementById('discountPercentage').value) / 100;
+            var discountedPrice = originalPrice * (1 - discountPercentage);
+    
+            document.getElementById('discountedPrice').value = discountedPrice.toFixed(2);
+        }
+    
+        function calculatePercentage() {
+            var originalPrice = 100; //database
+            var discountedPrice = parseFloat(document.getElementById('discountedPrice').value);
+            var discountPercentage = 1 - (discountedPrice / originalPrice);
+    
+            document.getElementById('discountPercentage').value = (discountPercentage * 100).toFixed(2);
+        }
+    </script>
+    <script>
+      function myFunction() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+      
+        // Loop through all table rows, and hide those who don't match the search query
+          for (i = 0; i < tr.length; i++) {
+          td1 = tr[i].getElementsByTagName("td")[1];
+          td2 = tr[i].getElementsByTagName("td")[6];
+          td5 = tr[i].getElementsByTagName("td")[7];
+  
+          if (td1 || td2 || td5) {
+              txtValue1 = td1.textContent || td1.innerText;
+              txtValue2 = td2.textContent || td2.innerText;
+              txtValue5 = td5.textContent || td5.innerText;
+  
+              if (txtValue1.toUpperCase().indexOf(filter) > -1 || 
+                  txtValue2.toUpperCase().indexOf(filter) > -1 ||
+                  txtValue5.toUpperCase().indexOf(filter) > -1 
+              ){
+                  tr[i].style.display = "";
+              } else {
+                  tr[i].style.display = "none";
+              }
+          }
+      }
+      }
+      </script>
+    
+    <script>
+      function ClearFields() {
+      document.getElementById("myInput").value = "";
+      var table = document.getElementById("myTable");
+      var tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        tr[i].style.display = "";
+      }
+      }
+      </script>
+
+{% endblock %}

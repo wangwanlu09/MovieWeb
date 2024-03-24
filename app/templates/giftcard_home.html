@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Giftcard{% endblock %}
+{% block head %}
+
+<style>
+    body, html {
+        height: 100%;
+        margin: 0;
+        overflow: auto;
+        background-color: black;
+      }
+</style>
+{% endblock %}
+{% block content %}
+
+<div class="container d-flex justify-content-end mt-5 mb-4" style="color:white; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">
+    <h1>GIFT CARD</h1>
+</div>
+
+<div class="container d-flex justify-content-center">
+    <div class="row">
+    {% for giftcard in giftcards %}
+    <div class="card mx-2 mb-4" style="width: 20rem; background-color: rgb(61, 61, 61); color:white;" >
+        <img src="{{ giftcard['image'] }}" class="card-img-top" alt="Promotion image">
+        <div class="card-body container d-flex justify-content-between align-items-end">
+            <div class="mx-2">
+                <h5 class="card-title">{{ giftcard['giftcard_name'] }}</h5>
+            </div>
+            <div>
+                <a href="{{ url_for('giftcards.giftcard_buy', giftcard_type_id=giftcard['giftcard_type_id']) }}" class="btn btn-outline-light">Buy</a>
+            </div>
+        </div>  
+    </div>
+    {% endfor %}
+</div>
+</div>
+
+{% endblock %}

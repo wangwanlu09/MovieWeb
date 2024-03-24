@@ -1,0 +1,353 @@
+{% if session['role'] == 'manager' %}
+{% extends "navdash_manager.html" %}
+{% elif session['role'] == 'admin' %}
+{% extends "navdash_admin.html" %}
+{% else %}
+{% extends "navdash_staff.html" %}
+{% endif %}
+{% block title %}Promotion List{% endblock %}
+{% block header %}
+<style>.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}</style>
+{% endblock %}
+{% block content %}
+<div class="container d-flex justify-content-end mt-5" style="font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">
+    <h1>MANAGE PROMOTIONS</h1>
+</div>
+
+<div class="container d-flex">
+    <div class="input-group mb-3">
+        <label for="allPromotions"></label>
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for promotions" class="form-control border-secondary">
+        <div>
+            <button type="submit" class="btn btn-secondary"><i class="bi bi-search"></i></button>
+            <button type="submit" class="btn btn-dark"><a href="#" class="text-decoration-none text-white"style="font-size: 13px;"  onclick="ClearFields();">Cancel</a></button>
+            <button type="submit" class="btn btn-outline-dark mx-2" href="#" data-bs-toggle="modal" data-bs-target="#changePromotionModal" style="font-size:13px;">Add Promotion</button>
+            <button type="submit" class="btn btn-outline-dark mx-2" href="#" data-bs-toggle="modal" data-bs-target="#ticketpromotion" style="font-size:13px;">Add Ticket to Promotion</button>
+            <a type="button" class="btn btn-outline-dark mx-2" href="{{ url_for('promotions.promotion_ticket_view') }}"  style="font-size:13px;">Ticket Promotion History</a>
+        </div>
+    </div>
+</div>
+
+<!-- add promotion popup -->
+<div class="container d-flex">
+    <div class="modal fade" id="changePromotionModal" tabindex="-1" aria-labelledby="changePromotionModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="changePromotionModal" style="color:grey; font-weight: bold;">Add Promotion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body mt-2">
+                    <form action="{{ url_for('promotions.promotion_add') }}" method="post">
+                        <div id="message"></div>
+                        <div class="mb-3">
+                            
+                            <label for="promoType" class="form-label" style="color:grey">Promotion Type:</label>
+                            <select name="promoType" class="form-select mb-2" aria-label="Default select example" required>
+                                <option value="" disabled selected>Please Choose...</option>
+                                {% for pt in promotion_types %}
+                                <option value="{{ pt['promotion_type_id'] }}">{{ pt['promotion_type'] }} - {{ pt['descriptions'] }}</option>
+                                {% endfor %}
+                            </select>
+                            <!-- <label for="newImage" class="form-label" style="color:grey">Image URL:</label>
+                            <input type="text" class="form-control" id="newImage" name="image" required>
+                        </div> -->
+                        <div class="modal-footer container d-flex justify-content-between">
+                            <div>
+                                <button type="reset" class="btn btn-secondary mx-2" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" id="submit" class="btn btn-dark">Save Changes</button>
+                            </div>
+                        </div>
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ticketpromotion" tabindex="-1" aria-labelledby="ticketpromotion" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="ticketpromotion" style="color:grey; font-weight: bold;">Add Ticket Promotion</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body mt-2">
+          <form action="{{ url_for('promotions.promotion_ticket_add') }}" method="post">    
+            <label for="ticketType" class="form-label" style="color:grey">Ticket Type:</label>
+            <select name="ticketType" id="ticketType" class="form-select mb-2" aria-label="Default select example" required>
+              <option value="" disabled selected>Please Choose ticket type(s) to set promotion price</option>
+              <option value="{{ticket_ids}}" style="color: #FFA500;">All Ticket Types</option>
+              {% for t in tickets%}
+              {% if t['is_fixed'] != 1 %}
+              <option value="{{ t['ticketid'] }}">{{ t['ticket_type'] }}</option>
+              {% endif %}
+              {% endfor %}
+            </select>  
+          
+              <div class="modal-footer container d-flex justify-content-between">
+                  <button type="button" class="btn btn-secondary mx-2" data-bs-dismiss="modal">Cancel</button>
+                  <button type="submit" class="btn btn-dark">Next</button>
+              </div>
+          </form>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+
+<!-- promotion list  -->
+<div class="container d-flex">
+    <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+        <div class="table-responsive">
+            <table class="table align-middle table-bordered" id="myTable">
+                <thead class="table-dark text-light">
+                    <th>ID</th>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Promotion Code</th>
+                    <th>Description</th>
+                    <th>Display Details</th>
+                    <th>Effective Datetime</th>
+                    <th>Expiration Datetime</th>
+                    {% if session['role'] in ['admin', 'manager'] %}
+                    <th>Enable</th>
+                    <th>Edit</th>
+                    <!-- <th>Delete</th> -->
+                    {% endif %}
+                </thead>
+
+                <tbody>
+                    {% for promotion in promotionlist %}
+                    <tr>
+                        <td class="col-md-1">{{ promotion['promotionid'] }}</td>
+                        <td class="col-md-2"><img src="{{ promotion['image'] }}" style="width: 150px; height:auto;"></td>
+                        <td class="col-md-1" style="font-size: 13px;">{{ promotion['title'] }}</td>
+                        <td class="col-md-1" style="font-size: 13px;">{{ promotion['promotion_type'] }}</td>
+                        {% if promotion['promotion_code'] is none %}
+                        <td class="col-md-1" style="font-size: 13px;"></td>
+                        {% else %}
+                        <td class="col-md-1" style="font-size: 13px;">{{ promotion['promotion_code'] }}</td>
+                        {% endif %}
+                        <td class="col-md-3" style="font-size: 13px;">{{ promotion['descriptions'] }}</td>
+                        <td class="col-md-3" style="font-size: 13px;">{{ promotion['details'] }}</td>
+                        <td class="col-md-2" style="font-size: 13px;">{{ promotion['effective_date'].strftime('%d/%m/%Y %I:%M %p') }}</td>
+                        <td class="col-md-2" style="font-size: 13px;">{{ promotion['expiration_date'].strftime('%d/%m/%Y %I:%M %p') }}</td>
+                        {% if session['role'] in ['admin', 'manager'] %}
+                        
+                        <td class="check">
+                          <label class="switch">
+                            
+                            <input type="checkbox"  onclick="enablePromotion(this.id)" id="{{ promotion['promotionid'] }}"
+                            {% if promotion['is_active'] == 1 %}
+                            checked="true" {% endif %}>
+                            
+                            
+                            <span class="slider round"></span>
+                          </label>
+                        </td>
+                        <td class="col-md-2"><a type="submit" class="btn btn-danger mt-2" style="font-size: 10px;" role="button" href="/promotions/edit?promotionid={{ promotion['promotionid'] }}"><i class="bi bi-pencil-square"></i> Edit</a></td>
+                        <!-- <td class="col-md-2"><a role="button" class="btn btn-warning mx-2" style="font-size:13px;" href="/promotions/delete?promotionid={{ promotion['promotionid'] }}">Delete</a></td> -->
+                        <!-- {% if promotion['promotion_type_id'] != 1 %}
+                        <td>
+                            
+                            <button type="button" class="btn btn-warning mt-2" style="font-size: 10px;" data-bs-toggle="modal" data-bs-target="#exampleModal{{ promotion['promotionid'] }}">Delete</button>
+                            <div class="modal fade" id="exampleModal{{ promotion['promotionid'] }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm Deletion</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <p>Are you sure you want to delete promotion <span style="color: blue;">{{ promotion['promotionid'] }} - {{ promotion['title'] }}?</span> </p>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <a type="button" class="btn btn-warning" href="/promotions/delete?promotionid={{ promotion['promotionid'] }}">Delete</a>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                        {% else %}
+                        <td>{{ '' }}</td>
+                          {% endif %} -->
+                        {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    function myFunction() {
+      // Declare variables
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("myTable");
+      tr = table.getElementsByTagName("tr");
+    
+      // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+        td1 = tr[i].getElementsByTagName("td")[2];
+        td2 = tr[i].getElementsByTagName("td")[3];
+        td3 = tr[i].getElementsByTagName("td")[4];
+        td4 = tr[i].getElementsByTagName("td")[5];
+        td5 = tr[i].getElementsByTagName("td")[6];
+        td6 = tr[i].getElementsByTagName("td")[7];
+        td7 = tr[i].getElementsByTagName("td")[8];
+
+        if (td1 || td2 || td5) {
+            txtValue1 = td1.textContent || td1.innerText;
+            txtValue2 = td2.textContent || td2.innerText;
+            txtValue3 = td3.textContent || td3.innerText;
+            txtValue4 = td4.textContent || td4.innerText;
+            txtValue5 = td5.textContent || td5.innerText;
+            txtValue6 = td6.textContent || td6.innerText;
+            txtValue7 = td6.textContent || td7.innerText;
+
+
+            if (txtValue1.toUpperCase().indexOf(filter) > -1 || 
+                txtValue2.toUpperCase().indexOf(filter) > -1 ||
+                txtValue3.toUpperCase().indexOf(filter) > -1 ||
+                txtValue4.toUpperCase().indexOf(filter) > -1 ||
+                txtValue5.toUpperCase().indexOf(filter) > -1 ||
+                txtValue6.toUpperCase().indexOf(filter) > -1 ||
+                txtValue7.toUpperCase().indexOf(filter) > -1
+                 
+
+            ){
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+    }
+    </script>
+
+<script>
+function ClearFields() {
+document.getElementById("myInput").value = "";
+var table = document.getElementById("myTable");
+var tr = table.getElementsByTagName("tr");
+for (i = 0; i < tr.length; i++) {
+  tr[i].style.display = "";
+}
+}
+</script>
+
+<script type="text/javascript">
+    let startInput = document.getElementById('effective');
+    let endInput = document.getElementById('expiration');
+    let messageDiv = document.getElementById('message');
+    let submitButton = document.getElementById('submit');
+  
+    let compare = () => {
+      let startValue = startInput.value;
+      let endValue = endInput.value;
+  
+      if (endValue < startValue) {
+        messageDiv.innerHTML = "<span style='color: red;'>Effective date must be before Expiration date!</span>";
+        submitButton.disabled = true;
+      } else {
+        messageDiv.innerHTML = '';
+        submitButton.disabled = false;
+      }
+    };
+  
+    startInput.addEventListener('change', compare);
+    endInput.addEventListener('change', compare);
+  </script>
+  <script>
+    function enablePromotion(id) {
+      var is_active = document.getElementById(id).checked;
+      var promotionid = id;
+      console.log(is_active);
+      console.log(id);
+      axios.post('/promotions/status_update', {promotionid:promotionid, is_active:is_active}
+    )
+    .then((response) => {
+      if(response.data.updatestatus == 1){
+        alertmessage = "Promotion #" + promotionid + " is now " + response.data.isenable
+        alert(alertmessage)
+      } else {
+        alert("Please log in as manager or admin to enable/disable prmotion")
+      }
+      
+    }
+    , (error) => {
+      console.log(error)
+    }
+    )
+      
+    }
+  </script>
+
+{% endblock %}

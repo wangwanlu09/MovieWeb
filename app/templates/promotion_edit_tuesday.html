@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Promotion Details{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+</head>
+<body>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="personal-card text-left">
+                <div class="image-container">
+                    <!-- change new path -->
+                    <img src="{{ promotion['image'] }}" class="container d-flex justify-content-center mb-2" alt="promotionimg" style="width:200px; height:auto" alt="Movie Picture">
+                </div>  
+                <div class="modal-body mt-2">
+                    <form action="{{ url_for('promotions.promotion_update') }}" method="post">
+                        <div class="mb-3">
+                            <label for="promotionid" class="form-label" style="color:grey">Promotion ID:</label>
+                            <input type="text" class="form-control mb-2" id="promotionid" disabled value="{{ promotion['promotionid'] }}">
+                            <input hidden type="number" name="promotionid" class="form-control" value="{{ promotion['promotionid'] }}" readonly>
+
+                            <!-- <label for="promotionid" class="form-label" style="color:grey">Promotion Code:</label>
+                            <input type="text" class="form-control mb-2" id="" disabled value="{{ promotion['promotion_code'] }}"> -->
+    
+                            <label for="newPromotionname" class="form-label" style="color:grey">Promotion Name:</label>
+                            <input type="text" class="form-control" id="newPromotionname" value="{{ promotion['title'] }}" name="title" required>
+    
+                            <label for="newPromotionname" class="form-label" style="color:grey">Promotion Description:</label>
+                            <input type="text" class="form-control" id="newPromotionname" value="{{ promotion['descriptions'] }}" name="descriptions" required>
+                                
+                            <label for="newPromotiondescription" class="form-label" style="color:grey">Promotion Details:</label>
+                            <textarea class="form-control" id="newPromotiondescription" rows="4" maxlength="200" name="details" required>{{ promotion['details'] }}</textarea>
+                            <small class="form-text text-muted">Characters limit: <span id="charCount">200</span></small><br/>
+    
+                            <!-- <label for="newEffectivedate" class="form-label" style="color:grey">Effective Date:</label>
+                            <input type="date" class="form-control mb-2" id="effective" value="{{ promotion['effective'] }}" step="7" name="tueDate" required> -->
+                           
+                        
+                            <div id="message"></div>
+
+                            <label for="newRating" class="form-label" style="color:grey">Promotion Type:</label>
+                            <input type="text" class="form-control mb-2" value="{{ promotion['promotion_type'] }} - {{ promotion['type_desc'] }}" disabled>
+                            <input type="text" class="form-control mb-2" value="{{ promotion['promotion_type_id'] }}" hidden name="promoType">
+
+                            <label for="newRating" class="form-label" style="color:grey">Promotion Ticket: </label>
+                            <input type="text" class="form-control mb-2" value="{{ tueTicket['ticket_type'] }}" disabled>
+                            <input type="text" class="form-control mb-2" name="ticketid" value="{{ tueTicket['ticketid'] }}" hidden>
+                            <a href="{{ url_for('ticket_price.manage_ticket_prices')}}" target="_blank">Manage Tuesday Discount Ticket</a>
+                            <br><br>
+
+                            <label for="newRating" class="form-label" style="color:grey">Ticket Promotion Price:</label>
+                            <input type="number" min="0" step="0.1" class="form-control" value="{{ tueTicket['price'] }}" name="price" required>
+                            
+                            <label for="newImage" class="form-label" style="color:grey">Image URL:</label>
+                            <input type="text" class="form-control" id="newImage" value="{{ promotion['image'] }}" name="image" required>
+                        </div>
+                        <div class="modal-footer container d-flex justify-content-between">
+                            <div>
+                                <a role="button" class="btn btn-success mx-2" href="{{ url_for('promotions.promotion_view') }}">Back</a>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-secondary mx-2" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" id="submit" class="btn btn-dark">Save Changes</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--css part -->
+<style>
+  body{
+    background-color: #ddd;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+ .personal-card {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.personal-card {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+</style>
+
+<script type="text/javascript">
+    let startInput = document.getElementById('effective');
+    let endInput = document.getElementById('expiration');
+    let messageDiv = document.getElementById('message');
+    let submitButton = document.getElementById('submit');
+  
+    let compare = () => {
+    let startValue = startInput.value;
+      let endValue = endInput.value;
+  
+      if (endValue < startValue) {
+        messageDiv.innerHTML = "<span style='color: red;'>Effective date must be before Expiration date!</span>";
+        submitButton.disabled = true;
+      } else {
+        messageDiv.innerHTML = '';
+        submitButton.disabled = false;
+      }
+    };
+  
+    startInput.addEventListener('change', compare);
+    endInput.addEventListener('change', compare);
+  </script>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>

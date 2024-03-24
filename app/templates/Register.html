@@ -1,0 +1,58 @@
+{% extends "login,register_navbar.html" %}
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/log_style.css') }}" />
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"> 
+{% endblock %}
+
+
+{% block content %}
+
+<form action="{{url_for('registration.register')}}" method="POST" id="myFormId">
+  <div class="login">
+    <div>
+      <p class="title">Register</p>
+      <label for="Username/Email">Username* </label>
+      <input placeholder="Username/Email" type="text" name="username" id="username" required /> 
+      <span id="username-error" style="color: rgb(216, 137, 108);"></span>
+
+      <label for="Confirm Username/Email">Confirm Username* </label>
+      <input placeholder="Confirm Username/Email" type="email" id="confirm_username" name="confirm_username" required />
+      <span id="confirm_username-error" style="color: rgb(216, 137, 108);"></span>
+      
+      <label for="First Name">First Name* </label>
+      <input placeholder="First Name" type="text" id="firstname" name="firstname" required />
+      <span id="firstname-error" style="color:rgb(216, 137, 108);"></span>
+
+
+      <label for="Surname">Surname* </label>
+      <input placeholder="Surname" type="text" id="lastname" pattern="^[a-zA-Z]{1,25}$" maxlength="25" title="Please enter letters only" name="lastname" required />
+      <span id="lastname-error" style="color:rgb(216, 137, 108);"></span>
+
+      <label for="Phone Number">Phone Number* </label>
+      <input id="phone" pattern="[0-9]{9,11}" placeholder="Phone Number" type="tel" id="phone" name="phone" required />
+      <span id="phone-error" style="color:rgb(216, 137, 108);"></span>
+
+      <label for="Passwordr">Password* </label>
+      <input placeholder="Password" type="password" id="password1" name="password1"  required />
+      <span id="password-error" style="color: rgb(216, 137, 108);"></span>
+      
+      <label for="Confirm Password">Confirm Password* </label>
+      <input placeholder="Confirm Password" type="password" id="password2" name="password2" pattern="(?=.*\d)(?=.*[a-z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter,and at least 8 characters" required />
+      <button type="button" class="loader" onclick="sendDateToBackendAndNavigate()">Sign Up</button>
+      <p>Already have an account? <a style="font-size: inherit;color:rgb(11, 108, 182)" href="{{url_for('customer_login.customerlogin')}}">Login here</a></p>
+    </div>
+      <div>
+          <h1 class="d-flex justify-content-center align-items-center"style="font-family:Impact"><i class="bi bi-film"> Register Here!</i></h1>
+      </div>
+
+  <script>
+     //define usernames from database
+      var usernames = {{ usernames | tojson | safe }};
+  </script>
+  </form>
+
+  <script src="{{ url_for('static', filename='js/register.js') }}"></script>
+
+{% endblock %}
+

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            overflow: auto;
+            background-color: black;
+          }
+    </style>
+</head>
+<body>
+
+
+    <div class="container d-flex" >
+        {% for s in sessions %}
+            {% if s.session_date.strftime("%Y/%d/%m") ==  month %}
+                {% for sessiontime in sessiontimes %}
+                    {% if s.sessiontime_id == sessiontime.sessiontime_id %}
+                        {% if 'loggedin' not in session %}
+                        <button type="submit" class="btn btn-outline-light btn-light btn-dark mx-2" data-bs-toggle="modal" data-bs-target="#loginModal" >{{ sessiontime.session12hours }}</button>
+                        {% elif session['role'] == 'customer' %}
+                        <!-- pass s.sessionid to href -->
+                        <a role="button" class="btn btn-outline-light btn-light btn-dark mx-2" href="{{url_for('booking.select_tickets', movieid=movieid,sessionid=s.sessionid )}}">{{ sessiontime.session12hours }}</a>
+                        {% else %}
+                        <!-- staff not making booking  -->
+                        <button type="submit" class="btn btn-outline-light btn-light btn-dark mx-2">{{ sessiontime.session12hours }}</button>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </div>
+
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModal" style="color:grey; font-weight: bold;">Login</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body mt-2">
+                <form action="{{ url_for('customer_login.customer_login_verify') }}" method="post">
+                    <div class="mb-3">
+                        <div class="login">
+                            <div class="container d-flex justify-content-center">
+                                <p class="title">Customer Log In</p>
+                                <label for='Username/Email'>Username/Email:</label>
+                                <input placeholder="Username/Email" name="username" required />
+                                <label for='password'>Password:</label>
+                                <input placeholder="Password" type="password" name="password" required />
+                                <input hidden name="booking_url">
+                                <button class="submit">Sign in</button>
+                                <p class="text">Don't have an account?</p>
+                                <button class="buttonShadow"><a href="{{ url_for('registration.register') }}">Register Here</a></button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--
+    <div class="container d-flex justify-content-end">
+        <button type="submit" class="btn btn-outline-light btn-light btn-dark mx-3"><a href="movies_showingnow.html" class="text-decoration-none text-white">Back</a></button>
+        {% if 'loggedin' in session %}
+            {% if session['role'] == 'customer' %}
+            <button type="submit" class="btn btn-light"><a href="#" class="text-decoration-none text-dark">Continue</a></button>
+            
+            {% endif %}
+        {% else %}
+            <button type="submit" class="btn btn-light" href="#" data-bs-toggle="modal" data-bs-target="#loginModal" style="font-size:13px;">Login to Continue</button>
+            <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModal" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="loginModal" style="color:grey; font-weight: bold;">Login</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body mt-2">
+                            <form action="{{ url_for('customer_login.customer_login_verify') }}" method="post">
+                                <div class="mb-3">
+                                    <div class="login">
+                                        <div class="container d-flex justify-content-center">
+                                            <p class="title">Customer Log In</p>
+                                            <label for='Username/Email'>Username/Email:</label>
+                                            <input placeholder="Username/Email" name="username" required />
+                                            <label for='password'>Password:</label>
+                                            <input placeholder="Password" type="password" name="password" required />
+                                            <input hidden name="booking_url">
+                                            <button class="submit">Sign in</button>
+                                            <p class="text">Don't have an account?</p>
+                                            <button class="buttonShadow"><a href="{{ url_for('registration.register') }}">Register Here</a></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+      
+      </div>
+    -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script> 
+</body>
+</html>

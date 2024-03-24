@@ -1,0 +1,163 @@
+{% if session['role'] == 'manager' %}
+{% extends "navdash_manager.html" %}
+{% elif session['role'] == 'admin' %}
+{% extends "navdash_admin.html" %}
+{% else %}
+{% extends "navdash_staff.html" %}
+{% endif %}
+{% block title %}Movie List{% endblock %}
+
+{% block content %}
+
+<div class="container d-flex justify-content-end mt-5" style="font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">
+    <h1>MANAGE MOVIES</h1>
+</div>
+  <!----Search and add movie---->
+<div class="container d-flex">
+    <div class="input-group mb-3">
+        <label for="allMovies"></label>
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for movies (name, description, starring)" class="form-control border-secondary">
+    <div>
+        <button type="submit" class="btn btn-secondary"><i class="bi bi-search"></i></button>
+        <button type="submit" class="btn btn-dark"><a href="#"class="text-decoration-none text-white" style="font-size: 13px;" onclick="ClearFields();">Cancel</a></button>
+        {% if session['role'] in ['admin', 'manager'] %}
+        <a href="{{ url_for('managemovies.movie_add') }}" role="button" style="font-size:13px;" class="btn btn-outline-dark mx-2" >
+            <i class="bi bi-pencil-square"></i>Add Movie
+        </a>
+        {% endif %}
+    </div>
+    
+    </div>
+</div>
+
+<!-- table: all the movies -->
+
+<div class="container d-flex">
+
+<div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+    <div class="table-responsive">
+        <table class="table align-middle table-bordered" id="myTable">
+            <!-- tablr headers -->
+            <thead class="table-dark text-light">
+                <th>ID</th>
+                <th>Image</th>
+                <th>Movie Name</th>
+                <th>Description</th>
+                <th>Starring</th>
+                <th>Rating</th>
+                <th>Genre</th>
+                <th>Runtime</th>
+                <th>Release Date</th>
+                <th>Start Showing</th>
+                <th>No. of Sessions</th>
+                {% if session['role'] in ['admin', 'manager'] %}
+                <th>Edit</th>
+                <th>Delete</th>
+                {% endif %}
+            </thead>
+            
+            <tbody>
+                {% for movie in movies %}
+                <tr>
+                    <td>{{ movie['movieid'] }}</td>
+                    <td><img src="{{ movie['image_url'] }}" class="img-fluid rounded-start col-md-1" alt="{{ movie['title'] }}" style="width: 80px; height:auto"></td>
+                    <td class="col-md-2" style="font-size: 13px;">{{ movie['title'] }}</td>
+                    <td class="col-md-2" style="font-size: 13px;">{{ movie['descriptions'] }}</td>
+                    <td class="col-md-2" style="font-size: 13px;">{{ movie['starring'] }}</td>
+                    <td class="col-md-1" style="font-size: 13px;">{{ movie['rating_code'] }}</td>
+                    <td class="col-md-1" style="font-size: 13px;">{{ movie['genre_name'] }}</td>
+                    <td class="col-md-1" style="font-size: 13px;">{{ movie['runtime_hour'] }}h{{ movie['runtime_minute'] }}m</td>
+                    <td class="col-md-1" style="font-size: 13px;">{{ movie['release_date'].strftime('%d/%m/%Y') }}</td>
+                    <td class="col-md-1" style="font-size: 13px;">{{ movie['start_date'].strftime('%d/%m/%Y') }}</td>
+                    {% if movie['schedules'] > 0 %}
+                    <td class="col-md-1 text-center" style="font-size: 13px;"><a target="_blank" href="{{ url_for('movie_schedule.manage_schedules', movieid = movie['movieid']) }}">
+                      {{ movie['schedules'] }} 
+                      Sessions</a></td>
+                    {% else %}
+                    <td></td>
+                    {% endif %}
+                    {% if session['role'] in ['admin', 'manager'] %}
+                    <td><a type="button" class="btn btn-danger mt-2" style="font-size: 10px;" role="button" href="/edit/movie?movieid={{ movie['movieid'] }}"><i class="bi bi-pencil-square"></i> Edit</a></td>
+                    <!-- <td><a role="button" class="btn btn-warning mx-2" style="font-size:13px;" href="/delete/movie?movieid={{ movie['movieid'] }}">Delete</a></td> -->
+                    <!-- cannot delete movies that are scheduled -->
+                    {% if movie['schedules'] > 0 %}
+                    <td></td>
+                    {% else %}
+                    <td>
+                        <!---Delete---> 
+                        <button type="button" class="btn btn-warning mt-2" style="font-size: 10px;" data-bs-toggle="modal" data-bs-target="#exampleModal{{ movie['movieid'] }}">Delete</button>
+                        <div class="modal fade" id="exampleModal{{ movie['movieid'] }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm Deletion</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <p>Are you sure you want to delete movie <span style="color: blue;">{{ movie['movieid'] }} - {{ movie['title'] }}?</span> </p>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <a type="button" class="btn btn-warning" href="/delete/movie?movieid={{ movie['movieid'] }}">Delete</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      {% endif %}
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</div>
+
+<script>
+    function myFunction() {
+      // Declare variables
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("myTable");
+      tr = table.getElementsByTagName("tr");
+    
+      // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+        td1 = tr[i].getElementsByTagName("td")[2];
+        td2 = tr[i].getElementsByTagName("td")[3];
+        td5 = tr[i].getElementsByTagName("td")[4];
+
+        if (td1 || td2 || td5) {
+            txtValue1 = td1.textContent || td1.innerText;
+            txtValue2 = td2.textContent || td2.innerText;
+            txtValue5 = td5.textContent || td5.innerText;
+
+            if (txtValue1.toUpperCase().indexOf(filter) > -1 || 
+                txtValue2.toUpperCase().indexOf(filter) > -1 ||
+                txtValue5.toUpperCase().indexOf(filter) > -1 
+            ){
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+    }
+    </script>
+
+<script>
+function ClearFields() {
+
+document.getElementById("myInput").value = "";
+var table = document.getElementById("myTable");
+var tr = table.getElementsByTagName("tr");
+for (i = 0; i < tr.length; i++) {
+  tr[i].style.display = "";
+}
+}
+</script>
+
+{% endblock %}

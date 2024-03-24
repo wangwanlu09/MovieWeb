@@ -1,0 +1,191 @@
+{% extends "navdash_admin.html" %}
+
+{% block title %}Customers List{% endblock %}
+
+{% block content %}
+
+<div class="container d-flex justify-content-end mt-5"
+    style="font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">
+    <h1>MANAGERS MANAGEMENT</h1>
+</div>
+
+<div class="container d-flex">
+    <div class="input-group mb-3">
+        <label for="allMovies"></label>
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for managers (firstname, lastname)"
+            class="form-control border-secondary">
+        <div>
+            <button type="submit" class="btn btn-secondary"><i class="bi bi-search"></i></button>
+            <button type="submit" class="btn btn-dark"><a href="#" class="text-decoration-none text-white"
+                    style="font-size: 13px;" onclick="ClearFields();">Cancel</a></button>
+            {% if session['role'] == 'admin' %}
+            <a href="{{ url_for('manageManagers.add_manager') }}" role="button" style="font-size:13px;"
+                class="btn btn-outline-dark mx-2">
+                <i class="bi bi-pencil-square"></i>Add MANAGERS
+            </a>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+
+<!-- table: all the movies -->
+<form method="POST" action="{{ url_for('manageManagers.manage_manager')}}" id="myForm"></form>
+<div class="d-flex justify-content-center container">
+    <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+        <div class="table-responsive">
+            <table class="table align-middle table-bordered" id="myTable">
+                <!-- tablr headers -->
+                <thead class="table-dark text-light text-center">
+                    <th>Staff ID</th>
+                    <th>First name</th>
+                    <th>Last Name</th>
+                    <th>Email address</th>
+                    <th>Phone</th>
+                    {% if session['role'] =='admin' %}    
+                    <th>Role</th>
+                    {% endif %}
+                    <th>Status</th>
+                    <th>Edit</th>
+                </thead>
+                <tbody>
+                    {% for m in managerInfo %}
+                    <tr>
+                        <td class="col-md-2" style="font-size: 13px;">{{ m['staffid'] }}</td>
+                        <td class="col-md-2" style="font-size: 13px;">{{ m['firstname'] }}</td>
+                        <td class="col-md-2" style="font-size: 13px;">{{ m['lastname'] }}</td>
+                        <td class="col-md-1" style="font-size: 13px;">{{ m['email'] }}</td>
+                        <td class="col-md-1" style="font-size: 13px;">{{ m['phone'] }}</td>
+                        {% if session['role'] =='admin' %}
+                        <td class="col-md-2" style="font-size: 13px;">
+                            <div class="d-flex justify-content-between align-items-center" style="display: flex;">
+                                <div style="flex: 1;">
+                                    <p class="m-0 text-center">{{ m['role'] | capitalize }}</p>
+                                </div>
+                                <button type="button" class="btn btn-warning md-2" style="font-size: 10px;" data-bs-toggle="modal" data-bs-target="#exampleModal{{m['staffid']}}">Change</button>
+                            </div>
+                      
+                                <div class="modal fade" id="exampleModal{{m['staffid']}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                  <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Change Role</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                      </div>
+                                      <form action="{{url_for('manageManagers.manager_role_change')}}" method="POST">
+                                        <div class="modal-body">
+                                            <label for="roleid" class="form-label" style="color:grey">Edit role:</label>
+                                            <select name="roleid" id="roleid" class="form-control" required>
+                                                {{m['role']}}
+                                                <option value="m['roleid']" disabled selected hidden>{{ m['role']| capitalize }}</option>
+                                                {% if roles %}
+                                                    {% for r in roles %}
+                                                        <option value="{{ r['roleid'] }}">{{ r['role']| capitalize }}</option>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </select>
+                                            <input type="hidden" name="accountid" id="accountid" value="{{m['accountid']}}">
+                                            <input type="hidden" name="staffid" id="staffid" value="{{m['staffid']}}">
+                                            
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-warning">Change</button>
+                                        </div>
+                                    </form>
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                              {% endif %}
+                        <td>                           
+                            {% if m['is_active'] == '1' %}
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" name="flexSwitchCheckDefault"  role="switch" value="Active" id="flexSwitchCheckDefault{{ m['staffid'] }}" checked onchange="toggleSwitch('{{ m['staffid'] }}', 'Active')">
+                                <label class="form-check-label" for="flexSwitchCheckDefault{{ m['staffid'] }}">Deactivate</label>
+                            </div>
+                            {% elif m['is_active'] == '0' %}
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" name="flexSwitchCheckDefault" role="switch" value="Inactive" id="flexSwitchCheckDefault{{ m['staffid'] }}" onchange="toggleSwitch('{{ m['staffid'] }}', 'Inactive')">
+                                <label class="form-check-label" for="flexSwitchCheckDefault{{ m['staffid'] }}">Activate</label>
+                            </div>
+                            {% else %}
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a type="button" class="btn btn-danger mt-2" style="font-size: 10px;" role="button"
+                                href="{{url_for('manageManagers.edit_manager', staffid=m['staffid'])}}"><i class="bi bi-pencil-square"></i> Edit</a>
+                        </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+    <script>
+        function toggleSwitch(staffid, statusValue) {
+            // Create a hidden input to include staffid and value in the form data
+            var hiddenInput = document.createElement("input");
+            hiddenInput.setAttribute("type", "hidden");
+            hiddenInput.setAttribute("name", "staffid");
+            hiddenInput.setAttribute("value", staffid);
+            document.getElementById("myForm").appendChild(hiddenInput);
+
+            hiddenInput = document.createElement("input");
+            hiddenInput.setAttribute("type", "hidden");
+            hiddenInput.setAttribute("name", "statusValue");
+            hiddenInput.setAttribute("value", statusValue);
+            document.getElementById("myForm").appendChild(hiddenInput);
+            
+            document.querySelector('form').submit();
+        }
+    </script>
+</form>
+
+<script>
+
+    function myFunction() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td1 = tr[i].getElementsByTagName("td")[2];
+            td2 = tr[i].getElementsByTagName("td")[3];
+            td5 = tr[i].getElementsByTagName("td")[4];
+
+            if (td1 || td2 || td5) {
+                txtValue1 = td1.textContent || td1.innerText;
+                txtValue2 = td2.textContent || td2.innerText;
+                txtValue5 = td5.textContent || td5.innerText;
+
+                if (txtValue1.toUpperCase().indexOf(filter) > -1 ||
+                    txtValue2.toUpperCase().indexOf(filter) > -1 ||
+                    txtValue5.toUpperCase().indexOf(filter) > -1
+                ) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    function ClearFields() {
+        document.getElementById("myInput").value = "";
+        var table = document.getElementById("myTable");
+        var tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            tr[i].style.display = "";
+        }
+    }
+</script>
+
+{% endblock %}

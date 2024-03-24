@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block head %}
+    <style>
+      body, html {
+        height: 100%;
+        margin: 0;
+        background-color: black;
+      }
+    </style> 
+{% endblock %} 
+
+  
+{% block content %}
+
+  <div class="container d-flex justify-content-end mt-5 mb-5" style="color:white; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">
+      <h1>CONTACT</h1>
+  </div>
+
+<div class="container d-flex mb-4" style="border-top: 1px solid rgb(91, 91, 91);"></div>
+
+<div class="container d-flex justify-content-center">
+    <div class="card container" style="width: 70rem; background-color: rgb(31, 31, 31);">
+        <img src="https://images.unsplash.com/photo-1440404653325-ab127d49abc1?q=80&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="card-img-top" alt="contact cinema">
+        <div class="card-body">
+          <h1 class="card-title text-light fw-bold">Movie Magic</h1>
+          <div class="container d-flex mb-4" style="border-top: 1px solid rgb(255, 255, 255);"></div>
+          <h3 class="fw-bold text-light">Opening Hours</h3>
+          <div class="text-light" style="font-size: 25px;">Mon - Fri: 8:30am - 11:30pm,</br>Sat & Sun: 8:30am - 11:59pm</div>
+          <p class="card-text text-light mt-4" style="font-size: 20px;" ><i class="bi bi-telephone-fill mx-2"></i><span id="phone">{{ contact['phone'] }}</span> </p>
+          <p class="card-text text-light mt-4" style="font-size: 20px;" ><i class="bi bi-geo-alt-fill mx-2"></i> {{ contact['street'] }}, {{ contact['city'] }}, {{ contact['country'] }}, {{ contact['postcode'] }}</p>
+        </div>
+      </div>
+      <form class="container-fluid mx-2" action="{{ url_for('home.send_message') }}" method="post">
+        <div style="width:30rem;">
+          <label for="contactName" class="form-label md-2" style="color:white; text-align: center; font-size: medium;">Send a message</label>
+          <br>
+            <label for="contactName" class="form-label md-2" style="color:grey">Full Name:</label>
+            <input type="text" class="form-control mt-2 " id="contactName" required pattern="[A-Za-z\s]{1,50}" name="fullname">
+    
+            <label for="contactEmail" class="form-label md-2 mt-2" style="color:grey">Email:</label>
+            <input type="email" class="form-control mt-2" id="newEffectivedate" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" name="email">
+    
+            <label for="newDescription" class="form-label md-2 mt-2" style="color:grey">Message:</label>
+                <textarea class="form-control mt-2" id="messages" rows="5" maxlength="200" required  name="message"></textarea>
+                <small class="form-text" style="color:grey">Characters limit: <span id="charCount">200</span></small> <br>
+            
+            <button type="submit" class="btn btn-light mt-4 container" id="myBtn" >Send</button>
+        </form>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+</div>
+  
+
+<div class="container d-flex mb-2 mt-4" style="border-top: 1px solid rgb(91, 91, 91);"></div>
+<div class="container d-flex justify-content-center text-light" style="font-size: 13px;">{{ contact['email'] }}</div>
+<script>
+  var el = document.getElementById('phone');
+  phone.innerText = phone.innerText.replace(/^(\d{2})/, '($1) ');
+</script>
+
+
+<script>
+  
+
+  function Validate()
+  {
+    var usernamecheck = /^[a-zA-Z0-9,.]*$/;
+
+    if(!$.trim(document.all.messages.value).match(usernamecheck))
+    {
+        alert ("Please use only letter, numbers, spaces, comma, and dots");
+        document.getElementById("myBtn").disabled = true;
+        return false;
+    } else {
+      document.getElementById("myBtn").disabled = false;
+      return true;
+    }
+}
+</script>
+
+  </body>
+  {% endblock %}

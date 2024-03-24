@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}COMING SOON{% endblock %}
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/log_style.css') }}" />
+
+<style>
+    body,
+    html {
+        height: 100%;
+        margin: 0;
+        overflow: auto;
+        background-color: black;
+    }
+
+    .profile-picture {
+        max-width: 40px;
+        height: auto;
+        border-radius: 50%;
+    }
+
+    a {
+        text-decoration: none;
+    }
+</style>
+
+{% endblock %}
+{% block content %}
+
+
+<!---jinja extension(base navbar)--->
+<div class="container d-flex justify-content-end mt-5"
+    style="color:white; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">
+    <h1>COMING SOON</h1>
+</div>
+<div class="container d-flex flex-column justify-content-center">
+    <ul class="nav nav-underline mt-3 mb-5">
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="/details/movie?movieid={{ movieid }}" style="color:white">Showing Now</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="{{ url_for('coming_soon.comingsoon') }}" style="color:white">Coming Soon</a>
+        </li>
+    </ul>
+    <!---delet layout-->
+    {% for movie in movies %}
+    <div class="container d-flex flex-column justify-content-center">
+        <!---jinja--->
+        <div class="card mb-4" style="max-width: 1000px; background-color: transparent;">
+            <div class="row g-0">
+                <div class="col-md-3">
+                    <img src="{{movie['image_url']}}" class="img-fluid rounded-start" alt="Movie1"
+                        style="width: 180px; height:auto">
+                </div>
+                <!---jinja---->
+                <div class="col-md-8">
+                    <div class="card-body bg-transparent text-white">
+                        <h5 class="card-title"><span style="font-weight: bold;">{{ movie['title'] }}</span></h5>
+                        <!---jinja change path--->
+                        <div class="mb-2"
+                            style="background-color: {{ movie['color'] }}; height: 25px; width: 25px; border-radius: 50%">
+
+                            <p style="font-weight: bold; font-size: medium; color:black; margin: 0; text-align: center">
+                                {{ movie['rating_code'] }}
+                            </p>
+                        </div>
+                        <span style="font-weight: bold; font-size: small; color:gray">Run time: {{ movie['runtime'] }}m
+                            | Genre:
+                            {{ movie['genre_name'] }}
+                        </span>
+                        <p style="font-weight: bold; font-size: large">
+                            <br>
+                            Release date:
+                        </p>
+                        <p>
+                            {{ movie['release_date'].strftime('%d/%m/%Y') }}
+                        </p>
+                        <p class="card-text" style="font-weight: 50;"><span
+                                style="font-weight: bold; font-size: 25px;">"</span>{{ movie['descriptions'] }}<span
+                                style="font-weight: bold; font-size: 25px;">"</span></p>
+                        <p class="card-text mb-5" style="font-weight: 50;">
+                            <b>Starring:</b>
+                            {{ movie['starring'] }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

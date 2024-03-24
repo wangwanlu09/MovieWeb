@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Admin{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"> 
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/card_long.css') }}" />
+    <style>
+      body, html {
+        height: 100%;
+        margin: 0;
+        
+      }
+    </style> 
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+      <div class="container-fluid">
+          <a class="navbar-brand" href="{{ url_for('home.homepage') }}">
+            <i class="bi bi-film"></i>
+            <span style="font-family: Impact;">MAGIC</span>
+          </a>
+      </div>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="{{ url_for('staff_login.admindashboard') }}">Dashboard</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link active" aria-current="page" href="{{ url_for('staff_login.admin_profile') }}">Profile</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                User
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{{ url_for('manage_customers.manage_customer') }}">Manage Customer</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{{ url_for('manage_staff.manage_employees') }}">Manage Staff</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('manageManagers.manage_manager') }}">Manage Manager</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Services
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{{ url_for('managemovies.movies_view') }}">Manage Movies</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('movie_schedule.manage_schedules') }}">Movie Schedules</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{{ url_for('promotions.promotion_view') }}">Manage Promotions</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{{url_for('ticket_price.manage_ticket_prices')}}">Ticket Prices</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{{url_for('checkIn.session_checkin')}}">Customer CheckIn</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('reports.report_overview') }}">Reports</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Setting</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{{ url_for('manage_settings.setting_contactinfo') }}">Contact Info</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{{ url_for('manage_settings.setting_genre') }}">Movie - Genre</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('manage_settings.setting_actors') }}">Movie - Actors</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('manage_settings.setting_ratings') }}">Movie - Ratings</a></li>
+                <!-- <li><hr class="dropdown-divider"></li> -->
+                <!-- <li><a class="dropdown-item" href="{{ url_for('manage_settings.setting_cinema_names') }}">Cinema - Names</a></li> -->
+              </ul>
+            </li>
+            <li class="nav-item">
+              <!-- <a class="nav-link" href="{{ url_for('manage_settings.view_messages') }}"><i class="bi bi-envelope-check"></i></a> -->
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('home.logout') }}">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </div>       
+    </nav>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+  </body>
+  <section class="content">
+    <header>
+    {% block header %}{% endblock %}
+    </header>
+    <p></p>
+    {% for category, message in get_flashed_messages(with_categories=true) %}
+      <div class="flash alert alert-{{category}} text-center alert-dismissible fade show m-auto">
+        {{ message }}
+      </div>
+    {% endfor %}
+    <p></p>
+    {% block content %}{% endblock %}
+  </section>
+
+</html>

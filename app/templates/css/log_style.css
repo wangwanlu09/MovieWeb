@@ -1,0 +1,139 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+}
+
+.login {
+  display: flex;
+  align-items: stretch; /* Ensure both columns have the same height */
+  height: 100vh;
+  margin: 0;
+  font-size: 12px;
+}
+
+.login > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; 
+  padding: 30px;
+  background-color: rgba(255, 255, 255);
+  z-index: 1;
+  width: 60%; 
+  height: auto; 
+}
+
+.login > div label {
+  align-self: flex-start; 
+  margin-bottom: -3px; 
+  margin-left: 20%;
+  margin-top: -5px;
+}
+
+
+.login > img {
+  width: 70%;
+}
+
+.login .title {
+  color: rgb(30, 30, 30);
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0 0 20px;
+}
+
+.login input {
+  width: 60%;
+  border-radius: 4px;
+  margin: 10px 0;
+  padding: 6px 15px;
+  background-color: rgb(245, 245, 245);
+  outline: none;
+  border: 1px solid rgb(0, 0, 0, 0);
+  font-size: 12px;
+  color: rgb(30, 30, 30);
+  transition: 0.3s;
+  box-sizing: border-box;
+}
+
+.login input::placeholder {
+  color: rgb(200, 200, 200);
+}
+
+.login input:hover {
+  background-color: #f1eff1;
+}
+
+.login input:focus {
+  background-color: #fff;
+  border: 1px solid rgb(87, 126, 219);
+  box-shadow: 0 0 4px 2px rgb(50, 50, 50, 0.1);
+}
+
+.login input:valid {
+  border: 1px solid rgb(220, 220, 220);
+}
+
+.login button {
+  border-radius: 4px;
+  background-color: rgb(0, 0, 0);
+  height: 35px;
+  padding: 8px;
+  width: 60%;
+  font-size: 12px;
+  font-weight: 500;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  margin: 20px 0;
+  transition: 0.3s;
+}
+
+.login button:hover {
+  background-color: #444444;
+}
+
+.login button i {
+  font-size: 16px;
+}
+
+.login .buttonShadow {
+  background-color: #e7e7e7;
+  color: rgb(100, 100, 100);
+  border: 1px solid rgb(50, 50, 50, 0.1);
+}
+.login .buttonShadow:hover {
+  background-color: rgb(50, 50, 50, 0.2);
+}
+
+.login a {
+  text-decoration: none;
+  color: rgb(96, 96, 96);
+  font-size: 12px;
+}
+
+.login .text {
+  font-size: 15px;
+  margin: 40px auto 0;
+  color: rgb(20, 20, 20);
+}
+
+/* Add media query for responsiveness */
+@media only screen and (max-width: 830px) {
+  .login {
+    flex-direction: column; /* Change to column layout for small screens */
+    align-items: center; /* Center items vertically */
+  }
+
+  .login > div {
+    width: 60%;
+    max-height: none; /* Remove maximum height */
+  }
+
+  .login > div img {
+    margin-top: None; /* Add margin for separation */
+  }
+}
+
+  

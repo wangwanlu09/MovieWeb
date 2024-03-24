@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% block title %}{{ movie['title'] }}{% endblock %}
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/log_style.css') }}" />
+<style>
+    .rating {
+        display: inline-block;
+    min-width: 30px;
+    height: 30px;
+    border: 1px solid white;
+    font-size: 18px;
+    margin: 3px;
+    text-align: center;
+    line-height: 30px;
+    padding: 0px 5px;
+    vertical-align: bottom;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    text-shadow: none !important;
+    box-sizing: content-box !important;
+    margin-bottom: 0.5em;
+      }
+</style>
+{% endblock %}
+{% block content %}
+
+
+<!---jinja extension(base navbar)--->
+<div class="container d-flex justify-content-end mt-5"
+    style="color:white; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">
+    <h1>MAGIC MOVIES</h1>
+</div>
+<div class="container d-flex flex-column justify-content-center">
+    <div>
+        <button type="submit" class="btn btn-outline-light btn-light btn-dark mx-2">
+            <a class="nav-link active" aria-current="page" href="{{ url_for('home.homepage') }}">Back</a>
+        </button>
+    </div>
+    <ul class="nav nav-underline mt-3 mb-5">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#" style="color:white">Showing Now</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#" style="color:white">Coming Soon</a>
+        </li>
+
+        <div class="container d-flex text-center">
+            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                <!---jinja--->
+                {% for formatted_date in formatted_dates %}
+                <input type="radio" class="btn-check" name="btnradio" id="{{ formatted_date[5:10] }}" autocomplete="off"
+                    onclick="loadData('{{ formatted_date[0:10] }}')">
+                <label class="btn btn btn-outline-light btn-light btn-dark" for="{{ formatted_date[5:10] }}"
+                    style="font-size:13px;">
+                    {{ formatted_date[5:] }}
+                </label>
+                {% endfor %}
+
+
+                <!---jinja end--->
+                <!--- six layouts--->
+                <!-- <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" onclick="loadData('2024-01-02')">
+                <label class="btn btn btn-outline-light btn-light btn-dark" for="btnradio2"
+                    style="font-size:13px;">01/02 TUE</a>
+                </label>
+
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" onclick="loadData('2024-01-03')">
+                <label class="btn btn btn-outline-light btn-light btn-dark" for="btnradio3"
+                    style="font-size:13px;">01/03 WED</a>
+                </label>
+
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio4" autocomplete="off" onclick="loadData('2024-01-04')">
+                <label class="btn btn btn-outline-light btn-light btn-dark" for="btnradio4"
+                    style="font-size:13px;">01/04 THU</label>
+
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio5" autocomplete="off" onclick="loadData('2024-01-05')">
+                <label class="btn btn btn-outline-light btn-light btn-dark" for="btnradio5"
+                    style="font-size:13px;">01/05 FRI</label>
+
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio6" autocomplete="off" onclick="loadData('2024-01-06')">
+                <label class="btn btn btn-outline-light btn-light btn-dark" for="btnradio6"
+                    style="font-size:13px;">01/06 SAT</label>
+
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio7" autocomplete="off" onclick="loadData('2024-01-07')">
+                <label class="btn btn btn-outline-light btn-light btn-dark" for="btnradio7"
+                    style="font-size:13px;">01/07 SUN</label> -->
+            </div>
+    </ul>
+
+    <!---delet layout-->
+    <div class="container d-flex flex-column justify-content-center">
+        <!---jinja--->
+        <div class="card mb-4" style="max-width: 1000px; background-color: transparent;">
+            <div class="row g-0">
+                <div class="col-md-3">
+                    <img src="{{movie['image_url']}}" class="img-fluid rounded-start" alt="Movie1"
+                        style="width: 180px; height:auto">
+                </div>
+                <!---jinja---->
+                <div class="col-md-8">
+                    <div class="card-body bg-transparent text-white">
+                        <h5 class="card-title"><span style="font-weight: bold;">{{ movie['title'] }}</span></h5>
+                        <!---jinja change path--->
+                        <div class="mb-2 rating" style="background-color:{{ movie['color'] }};"><p style="font-weight: bold; font-size: medium; color:black; margin: 0; text-align: center">{{ movie['rating_code'] }}</p></div>
+                        <span style="font-weight: bold; font-size: small; color:gray">Run time: {{ movie['runtime'] }}m
+                            | Genre:
+                            {{ movie['genre_name'] }}
+                        </span>
+                        <p style="font-weight: bold; font-size: large">
+                            <br>
+                            Release date:
+                        </p>
+                        <p>
+                            {{ movie['release_date'].strftime('%d/%m/%Y') }}
+
+                        </p>
+                        <p class="card-text" style="font-weight: 50;"><span
+                                style="font-weight: bold; font-size: 25px;">"</span>{{ movie['descriptions'] }}<span
+                                style="font-weight: bold; font-size: 25px;">"</span></p>
+                        <p class="card-text mb-5" style="font-weight: 50;">
+                            <b>Starring:</b>
+                            {{ movie['starring'] }}
+
+                        </p>
+
+                        <div id="dataContainer"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('{{ format_time }}').click();
+    });
+    function loadData(month) {
+        console.log("XHR request initiated for month1:", month);
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                document.getElementById('dataContainer').innerHTML = xhr.responseText;
+                console.log("3:");
+            }
+        };
+
+        xhr.open('GET', `/load_data?movieid={{ movie['movieid'] }}&month=${month}`, true);
+        console.log("XHR request initiated for month2:", month);
+        xhr.send();
+    }
+</script>
+
+{% endblock %}

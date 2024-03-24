@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/x-icon" href="/pletter.PNG" sizes="16x16">
+    <link rel="stylesheet" href="static/css/seats.css">
+    <title>Movie Seat Booking</title>
+</head>
+
+<body>
+
+    <ul class="showcase">
+        <li>
+            <div class="seat"></div>
+            <small>Available</small>
+        </li>
+        <li>
+            <div class="seat selected"></div>
+            <small>Selected</small>
+        </li>
+        <li>
+            <div class="seat occupied"></div>
+            <small>Occupied</small>
+        </li>
+
+    </ul>
+
+    <!-- Here occupied_seats jinja need to be confirm after some booking to check if it is working -->
+    <div class="container">
+        <div class="screen"></div>
+        <!-- loop all the available seat in every 12 rows and occupied seat will shown if it is occupied -->
+            {% for row in available_seats_info | batch(12, '&nbsp;') %}
+            <div class="row">
+                {% for s in row %} 
+                <div class="seat{% if occupied_seats and s[0] in occupied_seats|map(attribute=1) %} occupied{% endif %}" data-label="{{ s[1] }}" data-value="{{s[0]}}"></div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+    </div>
+
+    <!-- pass hidden values to javascript and back to back end -->
+    <input type="hidden" id="data-total-count" name="data-total-count" value="{{total_count}}">
+    <input type="hidden" id="total_price_numeric" name="total_price_numeric" value="{{total_price_numeric}}">
+    <input type="hidden" id="movieid" name="movieid" value="{{movieid}}">
+    <input type="hidden" id="sessionid" name="sessionid" value="{{sessionid}}">
+    <input type="hidden" id="cinemaid" name="cinemaid" value="{{cinemaid}}">
+    <input type="hidden" id="promotionid" name="promotionid" value="{{promotionid}}">
+    <input type="hidden" id="ticket_quantities_dict" name="ticket_quantities_dict" value="{{ticket_quantities_dict}}">
+
+   <!-- end -->
+
+
+
+    <p class="text"> You have selected <span id="count">0</span> seat: <span id="selected-seats-info"></span></p>
+
+    <div class="container2">
+        <div class="button-container">
+            <button class="back-btn" type="button"><a
+                    href="{{ url_for('booking.select_tickets', movieid=movieid, sessionid=sessionid) }}">Back</a></button>
+
+            <button class="buy-btn" type="button" onclick="sendSestidtoBackendAndRedirect()">Buy</button>
+        </div>
+    </div>
+
+    <script src="static/js/seats_script.js"></script>
+
+</body>
+
+</html>

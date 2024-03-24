@@ -1,0 +1,177 @@
+:root {
+    --black: #000000;
+    --grey: #ecedef;
+
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    background-color: #ffffff;
+    margin: 0;
+    padding: 0;
+}
+
+.cardWrap {
+    width: 27em;
+    margin: 3em auto;
+    color: #000000;
+    font-family: sans-serif;
+}
+
+.card {
+    background: linear-gradient(to bottom, var(--black) 0%, var(--black) 26%, var(--grey) 26%, var(--grey) 100%);
+    height: 11em;
+    float: left;
+    position: relative;
+    padding: 1em;
+    margin-top: 100px;
+}
+
+.cardLeft {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    width: 16em;
+}
+
+.cardRight {
+    width: 6.5em;
+    border-left: .18em dashed #fff;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    position: relative;
+
+    &:before,
+    &:after {
+        content: "";
+        position: absolute;
+        display: block;
+        width: .9em;
+        height: .9em;
+        background: #fff;
+        border-radius: 50%;
+    }
+
+    &:before {
+        top: -.4em;
+    }
+
+    &:after {
+        bottom: -.4em;
+    }
+}
+
+h1 {
+    font-size: 1.1em;
+    margin-top: 0;
+    color: #fff;
+
+    span {
+        font-weight: normal;
+    }
+}
+
+.title, .name, .seat, .time {
+    text-transform: uppercase;
+    font-weight: normal;
+
+    h2 {
+        font-size: 0.8px;
+        color: #525252;
+        margin: 0;
+    }
+
+    span {
+        font-size: 2em;
+        color: #a2aeae;
+    }
+}
+
+.title {
+    margin: 2px 0 0 0;
+}
+
+.name, .seat {
+    margin: 2px 0 0 0;
+}
+
+.time {
+    margin: 2px 0 0 1em;
+}
+
+.seat, .time {
+    float: left;
+}
+
+.eye {
+    position: relative;
+    width: 2em;
+    height: 1.5em;
+    background: #fff;
+    margin: 0 auto;
+    border-radius: 1em/0.6em;
+    z-index: 1;
+
+    &:before, &:after {
+        content: "";
+        display: block;
+        position: absolute;
+        border-radius: 50%;
+    }
+
+    &:before {
+        width: 1em;
+        height: 1em;
+        background: var(--red);
+        z-index: 2;
+        left: 8px;
+        top: 4px;
+    }
+
+    &:after {
+        width: .5em;
+        height: .5em;
+        background: #fff;
+        z-index: 3;
+        left: 12px;
+        top: 8px;
+    }
+}
+
+.number {
+    text-align: center;
+    text-transform: uppercase;
+
+    h3 {
+        color: var(--red);
+        margin: .9em 0 0 0;
+        font-size: 2.5em;
+    }
+
+    span {
+        display: block;
+        color: #a2aeae;
+    }
+}
+
+.barcode {
+    height: 2em;
+    width: 0;
+    margin: 1.2em 0 0 .8em;
+}
+
+.btn {
+    background-color: black;
+    color: white;
+    padding: 10px 20px;
+    margin-top: 80px; 
+    margin-right: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.select {
+    padding: 10px 10px;
+    width: 200px
+}

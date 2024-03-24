@@ -1,0 +1,527 @@
+{% extends "base.html" %}
+{% block title %}Payment{% endblock %}
+{% block head %}
+<style>
+      body, html {
+        height: 100%;
+        margin: 0;
+        overflow: auto;
+        background-color: black;
+      }
+      .profile-picture {
+      max-width: 40px;
+      height: auto;
+      border-radius: 50%;
+      }
+      a{
+          text-decoration: none;
+      }
+      .rating {
+        display: inline-block;
+    min-width: 30px;
+    height: 30px;
+    border: 1px solid white;
+    font-size: 18px;
+    margin: 3px;
+    text-align: center;
+    line-height: 30px;
+    padding: 0px 5px;
+    vertical-align: bottom;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    text-shadow: none !important;
+    box-sizing: content-box !important;
+    margin-bottom: 0.5em;
+      }
+</style>
+{% endblock %}
+{% block content %}
+
+<div class="container d-flex justify-content-end mt-5" style="color:white; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">
+  <h1>PAYMENT</h1>
+</div>
+
+<div class="container d-flex flex-column justify-content-center">
+    <div class="card mb-4" style="max-width: 1000px; background-color: transparent;">
+      <div class="row g-0">
+          <div class="col-md-3">
+              <img src="{{ movie['image_url'] }}" class="img-fluid rounded-start" alt="Movie1" style="width: 180px; height:auto">
+          </div>
+          <input hidden name="session_datetime" id="session_datetime" value="{{ movie['session_datetime'] }}">
+            <!---jinja---->
+            <div class="col-md-8">
+              <div class="card-body bg-transparent text-white">
+                  <h5 class="card-title"><span style="font-weight: bold;">{{ movie['title'] }}</span></h5>
+                  <!---jinja change path--->
+                  <div class="mb-2 rating" style="background-color:{{ movie['color'] }};"><p style="font-weight: bold; font-size: medium; color:black; margin: 0; text-align: center">{{ movie['rating_code'] }}</p></div>
+                  <span style="font-weight: bold; font-size: small; color:gray">{{ movie['runtime'] }}m | {{ movie['genre_name'] }}</span>
+                  <P class="card-text mt-2"><span style="font-weight: bold; font-size: 16px;">Date:</span> {{ movie['session_date'].strftime('%A, %d/%m/%Y') }}</P>
+                  <P class="card-text mt-2"><span style="font-weight: bold; font-size: 16px;">Time:</span> {{ movie['session12hours'] }}</P>
+                  <P class="card-text mt-2"><span style="font-weight: bold; font-size: 16px;">Cinema:</span> {{ movie['name'] }}</P>
+                  <p class="card-text mb-3" style="font-weight: 50;"><span style="font-weight: bold; font-size: 25px;">"</span>{{ movie['descriptions'] }}<span style="font-weight: bold; font-size: 25px;">"</span></p>
+              </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<div class="container d-flex justify-content-center mt-5 mb-5" id="paymentform">       
+    <form action="{{ url_for('payments.payment_booking_made') }}" method="post">
+        <div class="row g-3">
+    
+          
+          <div class="col-md-6">  
+            
+            <span class="text-white">Payment Method</span>
+            <div class="card">
+    
+              <div class="accordion" id="accordionExample">
+                
+                <div class="card">
+                  <div class="card-header p-0" id="headingTwo">
+                    <h2 class="mb-0">
+                      <button class="btn btn-light btn-block text-left collapsed p-3 rounded-0 border-bottom-custom" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        <div class="d-flex align-items-center justify-content-between">
+    
+                          <span>Paypal</span>
+                          <img src="{{ url_for('static', filename='images/paypal.png') }}" width="30">
+                          
+                        </div>
+                      </button>
+                    </h2>
+                  </div>
+                  <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                    <div class="card-body">
+                      <input type="text" class="form-control" placeholder="Paypal email">
+                    </div>
+                  </div>
+                </div>
+    
+                <div class="card">
+                  <div class="card-header p-0">
+                    <h2 class="mb-0">
+                      <button class="btn btn-light btn-block text-left p-3 rounded-0" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        <div class="d-flex align-items-center justify-content-between">
+    
+                          <span>Credit card</span>
+                          <div class="icons">
+                            <img src="{{ url_for('static', filename='images/visa.png') }}" width="30">
+                            <img src="{{ url_for('static', filename='images/mastercard.png') }}" width="30">
+                          </div>
+                          
+                        </div>
+                      </button>
+                    </h2>
+                  </div>
+    
+                  <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                    <div class="card-body payment-card-body">
+                      
+                      <span class="font-weight-normal card-text">Card Number *</span>
+                      <div class="input">
+    
+                        <i class="fa fa-credit-card"></i>
+                        <input type="text" id="phone" class="form-control" placeholder="0000 0000 0000 0000" required pattern="^(?:\d[ ]*?){13,16}$" title="13 to 16-digit card number">
+                        
+                      </div> 
+                      <P></P>
+                      <div class="row mt-3 mb-3">
+    
+                        <div class="col-md-8">
+                          
+                          <span class="font-weight-normal card-text">Expiry Date *</span>
+                          <div class="input">
+    
+                            <i class="fa fa-calendar"></i>
+                            <input type="month" class="form-control" placeholder="MM" required min="{{ currentmonth }}">
+                            
+                          </div> 
+                          
+                        </div>
+    
+                        <div class="col-md-8"><br></div>
+                        <div class="col-md-6">
+    
+                          <span class="font-weight-normal card-text">CVC/CVV *</span>
+                          <div class="input">
+    
+                            <i class="fa fa-lock"></i>
+                            <input type="text" class="form-control" placeholder="000" required pattern="^\d{3}$" title="3-digit code">
+                            
+                          </div> 
+                          
+                        </div>
+                        
+    
+                      </div>
+    
+                      <span class="text-muted certificate-text"><i class="fa fa-lock"></i> Your transaction is secured with ssl certificate</span>
+                      <div class="p-4 d-flex justify-content-center">
+    
+                        <button type="submit" class="btn btn-dark btn-block free-button" id="paynowbtn">Pay Now</button> 
+                          
+                        </div>
+                     
+                    </div>
+                  </div>
+                  
+                </div>
+                
+              </div>
+              
+            </div>
+    
+          </div>
+          <input hidden name="seatid" value="{{ seat_id }}">
+          <input hidden name="sessionid" value="{{ movie['sessionid'] }}">
+          <input hidden name="py_gcdeducted" id="py_gcdeducted" value="0">
+          <input hidden name="py_gcnum" id="py_gcnum" value="">
+          <input hidden name="from_form" value="yes">
+          <input hidden name="total" id="total" value="{{ amount }}">
+          <input hidden name="originalTotal" id="originalTotal" value="{{ amount }}">
+          <input hidden name="py_promodeducted" id="py_promodeducted" value="0">
+          <input hidden name="py_promocode" id="py_promocode" value="">
+
+        </form>
+    
+          <div class="col-md-6">
+              <span class="text-white">Booking Confirmation</span>
+    
+              <div class="card">
+    
+                <div class="d-flex justify-content-between p-3">
+    
+                  <div class="d-flex flex-column">
+    
+                    <span style="font-size: 20px;">Total Price<i class="fa fa-caret-down"></i></span>
+                    
+                  </div>
+    
+                  <div class="mt-1">
+                   <b style="font-size: 25px;">$</b> <span style="font-size: 25px;" name="preTotal" id="preTotal">
+                      {{ amount }}
+                    </span>
+                  </div>
+                  
+                </div>
+    
+                <hr class="mt-0 line">
+                
+                <div class="p-3">
+    
+                    
+                    <!-- {% for t in tickets %}
+                    <div class="d-flex justify-content-between mb-2">
+                      <span>{{ t['ticket_type'] }} x {{ t['number'] }}</span>
+                      <span>${{ t['price'] }}</span>
+                      
+                    </div>
+                    {% endfor %} -->
+    
+                    
+
+                    <div class="d-flex justify-content-between mb-2">
+                      <table style="width:100%" id="myTable">
+                      <thead>
+                        <th hidden>TICKETID</th>
+                        <th>Ticket</th>
+                        <th style="text-align: center;">Quantity</th>
+                        <th style="text-align: center;">UnitPrice</th>
+                        <th style="text-align: center;">Total</th>
+                        
+                      </thead>
+                      <tbody>
+                      {% for t in tickets %}
+                      <tr>
+                        <td hidden>{{ t['ticketid'] }}</td>
+                      <td>{{ t['ticket_type'] }}</td>
+                      <td style="text-align: center;">{{ t['number'] }}</td>
+                      <td style="text-align: center;">{{ "%.2f"|format(t['price']) }}</td>
+                      <td style="text-align: center;">{{  "%.2f"|format(t['price'] *  t['number']) }}</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                    </table>
+                    </div>
+                    <p></p>
+                    
+                    <hr class="mt-0 line">
+                    
+                    <div class="d-flex justify-content-between mb-2">
+    
+                        <span>Seats</span>
+                        <span>
+                          {{ seat_number|join(", ") }}
+                        </span>
+                        
+                      </div>
+                      <hr class="mt-0 line">
+    
+                    
+                    <form name="giftcard" id="giftcard" action="{{ url_for('payments.payment_booking_made') }}" method="post">
+                      {% if is_tuesday == 0 %}
+                      <div class="d-flex justify-content-between mb-2">
+      
+                        <span>Promotion Code   </span>
+                    </div>
+                    
+                      <div class="d-flex justify-content-between mb-4" >
+                      
+                        <span><input type="text" name="promocode" id="promocode">  </span>
+                        <span style="display: none;" id="appliedPromo"></span>
+                        <!-- cancel and redirect back to payment -->
+                        <a id="cancelPromo" type='button' class='btn-close'  style="display: none;" href="{{ url_for('payments.payment_booking') }}"></a>
+                        <span><button type="button" class="btn btn-dark btn-block free-button" onclick="checkPromoCode()" id="buttonPromo">Apply</button></span>
+                      </div>
+                      <div class="d-flex justify-content-between mb-2">
+                      
+                        <div id="messagePromo" ></div>
+                      </div>
+                      <p></p>
+                    {% endif %}
+                      <div class="d-flex justify-content-between mb-2">
+                        
+                        <span>Giftcard   </span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-4" >
+                      
+                      <span><input type="text"  name="num" id="num">  </span>
+                      <span><button type="button" class="btn btn-dark btn-block free-button" onclick="checkgifcard()">Apply </button></span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                      
+                      <div id="message" ></div>
+                      
+                    </div>
+                   <br>
+                    <div class="d-flex justify-content-between mb-2" >
+                      
+                      <div style="display:none;" name="gcresult" id="gcresult">
+                        <span>Giftcard Balance</span>
+                      </div>
+                      <span id="balance" name="balance" style="font-size: 20px;">
+                      </span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2" >
+                      <div style="display:none;" name="gcapplied" id="gcapplied">
+                        <span>Giftcard Applied</span>
+                      </div>
+                      <span id="appliedamt" name="appliedamt" style="font-size: 20px;">
+                      </span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+    
+                      <span style="font-size: 25px;">Payment Amount</span>
+                      <div class="mt-1">
+                        <b style="font-size: 25px;">$</b>
+                      <span style="font-size: 25px;" name="paymentamt" id="paymentamt">
+                        {{ amount }}
+                      </span>
+                    </div>
+                      
+                    </div>
+                    <input hidden name="zero_gcdeducted" id="zero_gcdeducted" value="0">
+                    <input hidden name="zero_gcnum" id="zero_gcnum" value="">
+                    <input hidden name="zero_promodeducted" id="zero_promodeducted" value="0">
+                    <input hidden name="zero_promocode" id="zero_promocode" value="">
+                    <div class="d-flex justify-content-between mb-2" >
+                      <div style="display:none;" name="gcpay" id="gcpay">
+                        <p></p>
+                        <button type="submit" class="btn btn-dark btn-block free-button" >Pay by Giftcard</button>
+                      </span>
+                    </div>
+                  </form>
+                <!-- <hr class="mt-0 line"> -->               
+    
+                <div>
+                
+              </div>
+          </div>
+          
+        </div>
+        
+    
+      </div>
+    <script>
+      document.getElementById('phone').addEventListener("keyup", function(){
+   txt=this.value;
+   if (txt.length==4 || txt.length==9 || txt.length==14)
+    this.value=this.value+" ";
+  
+});
+    </script>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+  let checkgifcard = () => {
+    const gcform = document.forms['giftcard'];
+    const numelement = gcform['num'];
+    const number = numelement.value;
+    let messageDiv = document.getElementById('message');
+    let total = document.getElementById('total').value;
+    axios.post('/giftcard/validation', {number:number}
+    )
+    .then((response) => {
+      if(response.data.giftcard_exists == "false") {
+        messageDiv.innerHTML = "<span class='alert alert-danger'>Invalid Giftcard: " + number + "     <button type='button' class='btn-close' data-bs-dismiss='alert'></button></span>";
+        var resetpayment = parseFloat(document.getElementById('total').value);
+        document.getElementById('paymentamt').innerHTML = resetpayment.toFixed(2);
+        numelement.value = '';
+        document.getElementById('appliedamt').innerHTML = 0;
+        document.getElementById('appliedamt').style.display = 'none';
+        document.getElementById('gcapplied').style.display = 'none';
+        document.getElementById('balance').innerHTML = 0;
+        document.getElementById('balance').style.display = 'none';
+        document.getElementById('gcresult').style.display = 'none'; 
+        document.getElementById('gcpay').style.display = 'none';
+        document.getElementById('py_gcdeducted').value = "0";
+        document.getElementById('py_gcnum').value = "";
+        document.getElementById('zero_gcdeducted').value = "0";
+        document.getElementById('zero_gcnum').value = "";
+        document.getElementById('paynowbtn').style.display = 'block';
+
+      } else {messageDiv.innerHTML = '';
+        document.getElementById('gcresult').style.display = 'block'; 
+        document.getElementById('balance').innerHTML  = response.data.balance;
+        let netamount = total - response.data.balance;
+        if (netamount > 0) {
+          document.getElementById('paymentamt').innerHTML = netamount.toFixed(2);
+          document.getElementById('py_gcdeducted').value = response.data.balance;
+          document.getElementById('py_gcnum').value = number;
+          document.getElementById('appliedamt').style.display = 'block';
+          document.getElementById('balance').style.display = 'block';
+          document.getElementById('gcapplied').style.display = 'block';
+          document.getElementById('gcresult').style.display = 'block'; 
+          document.getElementById('appliedamt').innerHTML = response.data.balance.toFixed(2);
+          document.getElementById('balance').innerHTML = response.data.balance.toFixed(2);
+          document.getElementById('paynowbtn').style.display = 'block';
+
+        } else {
+          var zerototal = 0
+          document.getElementById('paymentamt').innerHTML = zerototal.toFixed(2);
+          document.getElementById('gcapplied').style.display = 'block';
+          document.getElementById('appliedamt').innerHTML = parseFloat(total).toFixed(2);
+          document.getElementById('gcpay').style.display = 'block';
+          document.getElementById('zero_gcdeducted').value = total;
+          document.getElementById('zero_gcnum').value = number;
+          document.getElementById('py_gcdeducted').value = total;
+          document.getElementById('py_gcnum').value = number;
+          // document.getElementById('appliedamt').innerHTML = total.toFixed(2);
+          document.getElementById('balance').innerHTML = response.data.balance.toFixed(2);
+          document.getElementById('paynowbtn').style.display = 'none';
+          document.getElementById('appliedamt').style.display = 'block';
+          document.getElementById('balance').style.display = 'block';
+         
+        }
+        
+        
+      }
+    }, (error) => {
+      console.log(error)
+    })
+  }
+
+  function checkPromoCode() {
+    const gcform = document.forms['giftcard'];
+    const promoelement = gcform['promocode'];
+    const promocode = promoelement.value;
+    const session_datetime = document.getElementById('session_datetime').value;
+    let messageDiv = document.getElementById('messagePromo');
+    messageDiv.innerHTML = '';
+    var totalelem = document.getElementById('total');
+    console.log(promocode)
+    axios.post('/promotions/validation', {promocode:promocode, session_datetime:session_datetime}
+    )
+    .then((response) => {
+      if(response.data.promovalid == "false") {
+        promoelement.value = '';
+        totalelem.value = document.getElementById('originalTotal').value;
+        var temporiginal = document.getElementById('originalTotal').value;
+        document.getElementById('preTotal').innerHTML = parseFloat(temporiginal).toFixed(2);
+        messageDiv.innerHTML = "<span class='alert alert-danger'>Invalid Promotion Code: " + promocode + "     <button type='button' class='btn-close' data-bs-dismiss='alert'></button></span>";
+        document.getElementById('cancelPromo').style.display = 'none';
+      } else {
+        var ticketprice = response.data.tpdict;
+        console.log(ticketprice)
+        // var MyTable = document.getElementById('myTable');
+        var table = document.getElementById("myTable");
+        var tr = table.getElementsByTagName("tr");
+        var promoTotal = 0; 
+        for (i = 0; i < tr.length; i++) {
+          tdID = tr[i].getElementsByTagName("td")[0];
+          tdQuantity = tr[i].getElementsByTagName("td")[2];
+          tdUnitprice = tr[i].getElementsByTagName("td")[3];
+          tdTotal = tr[i].getElementsByTagName("td")[4];
+          // some invisible rows are undefined (first and last)
+          if (tdID) { 
+            
+            if (ticketprice[tdID.innerHTML]) {
+              tdUnitprice.innerHTML = ticketprice[tdID.innerHTML].toFixed(2);
+              tdUnitprice.style.color = "#00AA00";
+              var linetotal = ticketprice[tdID.innerHTML] * tdQuantity.innerHTML
+              tdTotal.innerHTML = linetotal.toFixed(2);
+              tdTotal.style.color = "#00AA00";
+              
+            }
+            promoTotal = promoTotal + parseFloat(tdTotal.innerHTML)
+            
+          }
+          
+        }
+        promoTotal = promoTotal.toFixed(2)
+        console.log(promoTotal);
+
+        document.getElementById('preTotal').innerHTML = promoTotal
+        totalelem.value = promoTotal - document.getElementById('appliedamt').innerHTML;
+        var formattotal = promoTotal - document.getElementById('appliedamt').innerHTML;
+        // console.log(formattotal);
+        if (formattotal > 0 ){
+          // giftcard balance < promotion total 
+          document.getElementById('paymentamt').innerHTML = formattotal.toFixed(2);
+          document.getElementById('promocode').style.display = "none";
+          document.getElementById('appliedPromo').style.display = 'block';
+          document.getElementById('appliedPromo').innerHTML = promocode;
+          document.getElementById('buttonPromo').disabled = true;
+          document.getElementById('cancelPromo').style.display = 'block';
+
+          document.getElementById('zero_promodeducted').value = document.getElementById('originalTotal').value - promoTotal;
+          document.getElementById('zero_promocode').value = promocode;
+
+          document.getElementById('py_promodeducted').value = document.getElementById('originalTotal').value - promoTotal;
+          document.getElementById('py_promocode').value = promocode;
+        }
+        else { 
+          // giftcard cover the promotion total
+          var zerototal = 0;
+          document.getElementById('paymentamt').innerHTML = zerototal.toFixed(2);
+          document.getElementById('promocode').style.display = "none";
+          document.getElementById('appliedPromo').style.display = 'block';
+          document.getElementById('appliedPromo').innerHTML = promocode;
+          document.getElementById('buttonPromo').disabled = true;
+          document.getElementById('cancelPromo').style.display = 'block';
+          document.getElementById('appliedamt').innerHTML = promoTotal;
+
+          document.getElementById('zero_promodeducted').value = document.getElementById('originalTotal').value - promoTotal;
+          document.getElementById('zero_promocode').value = promocode;
+
+          document.getElementById('py_promodeducted').value = document.getElementById('originalTotal').value - promoTotal;
+          document.getElementById('py_promocode').value = promocode;
+
+          document.getElementById('zero_gcdeducted').value = promoTotal;
+          document.getElementById('zero_gcnum').value = document.getElementById('num').value;
+
+          // disable pay now button 
+          document.getElementById('paynowbtn').style.display = 'none';
+          // enable pay by credit card button 
+          document.getElementById('gcpay').style.display = 'block';
+
+        }
+      }
+    }
+    )
+  }
+</script>
+{% endblock %}

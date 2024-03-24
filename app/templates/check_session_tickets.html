@@ -1,0 +1,105 @@
+{% if session['role'] == 'manager' %}
+{% extends "navdash_manager.html" %}
+{% elif session['role'] == 'admin' %}
+{% extends "navdash_admin.html" %}
+{% else %}
+{% extends "navdash_staff.html" %}
+{% endif %}
+{% block title %}Schedule List{% endblock %}
+
+{% block content %}
+
+
+<!-- Extension -->
+<div class="container d-flex justify-content-end mt-5"
+  style="font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">
+  <h1>TICKET CHECK STATIONS</h1>
+</div>
+<div class="container d-flex">
+  <div class="input-group mb-3">
+    <label for="allPromotions"></label>
+    <input type="text" id="myInput" onkeyup="myFunction()"
+      placeholder="Search for today's session to check in(session ID)" class="form-control border-secondary">
+    <div>
+      <button type="submit" class="btn btn-secondary"><i class="bi bi-search"></i></button>
+      <button type="submit" class="btn btn-dark"><a href="#" class="text-decoration-none text-white"
+          style="font-size: 13px;">Cancel</a></button>
+    </div>
+  </div>
+</div>
+
+
+  <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+    <div class="table-responsive">
+      <table class="table align-middle table-bordered" id="myTable">
+        <thead class="table-dark text-light">
+          <th>Session ID</th>
+          <th>Movie Name</th>
+          <th>Cinema</th>
+          <th>Session Date</th>
+          <th>Session Time</th>
+          <th>Check In</th>
+        </thead>
+        <tbody>
+          {% for ts in today_session_list %}
+          <tr>
+            <td class="col-md-1">{{ ts['sessionid']}}</td>
+            <td class="col-md-3">{{ ts['title']}}</td>
+            <td class="col-md-1">{{ ts['name']}}</td>
+            <td class="col-md-1">{{ ts['sd']}}</td>
+            <td class="col-md-1">{{ ts['sessiontime_12hrs']}}</td>
+            <td class="col-md-1">
+              <input type="hidden" value="{{ ts['sessionid'] }}" name="sessionid" id="sessionid" >
+              <a type="button" href="{{ url_for('checkIn.check_in_ticket', sessionid=ts['sessionid'])}}" class="btn btn-danger mt-2 text-decoration-none text-white" style="font-size: 10px;"><i class="bi bi-pencil-square"></i> Check In</a>
+            </td>
+            
+          </tr>
+          {% endfor %}
+        </tbody>
+    </div>
+  </div>
+
+
+<script>
+  function myFunction() {
+    // Declare variables
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("tr");
+
+    // Loop through all table rows, and hide those who don't match the search query
+    for (i = 0; i < tr.length; i++) {
+      td1 = tr[i].getElementsByTagName("td")[0];
+      td5 = tr[i].getElementsByTagName("td")[4];
+
+      if (td1 || td5) {
+        txtValue1 = td1.textContent || td1.innerText;
+        txtValue5 = td5.textContent || td5.innerText;
+
+        if (txtValue1.toUpperCase().indexOf(filter) > -1 ||
+          txtValue5.toUpperCase().indexOf(filter) > -1
+        ) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+
+  function ClearFields() {
+    document.getElementById("myInput").value = "";
+    var table = document.getElementById("myTable");
+    var tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      tr[i].style.display = "";
+    }
+  }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
+{% endblock %}

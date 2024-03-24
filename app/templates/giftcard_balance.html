@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Giftcard Balance{% endblock %}
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/log_style.css') }}" />
+<style>
+    body, html {
+        height: 100%;
+        margin: 0;
+        overflow: auto;
+        background-color: black;
+      }
+      
+</style>
+{% endblock %}
+{% block content %}
+
+<div class="container d-flex justify-content-end mt-5 mb-4" style="color:white; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">
+    <h1>GIFT CARD BALANCE</h1>
+</div>
+
+<div class=container>
+    <!-- finding the post code -->
+    <h1 class="col-md-6 col-md-offset-3 center title text-white">Gift Card Number</h1>
+    <div class="col-md-6 col-md-offset-3 center" id="placediv">
+          <div class = "form-group">
+      <label for="zip"></label>
+              <input type="text" class="form-control center" placeholder="16-digits Number" name="place" id="place"/><br/>
+              <!-- <button class="btn btn-success center predict">Check Giftcard Balance</button> -->
+              <button type="button" class="btn btn-outline-light btn-light btn-dark" onclick="checkgifcard()">Check Giftcard Balance</button>
+            </div> <!-- end of class form-group -->
+    </div>
+      <br>
+      <!-- <div class="col-md-6 col-md-offset-3 center" id="message"></div> -->
+      <input class="col-md-6 col-md-offset-3 center alert alert-danger" id="message1" disabled style="display: none; text-align: center;">
+      <input class="col-md-6 col-md-offset-3 center alert alert-success" id="message2" disabled style="display: none; text-align: center;">
+
+      <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    function checkgifcard() {
+    let number = document.getElementById('place').value
+    let messageDiv1 = document.getElementById('message1');
+    let messageDiv2 = document.getElementById('message2');
+    axios.post('/giftcard/validation', {number:number}
+    )
+    .then((response) => {
+      if(response.data.giftcard_exists == "false") {
+        messageDiv2.style.display = "none";
+        messageDiv1.value = "Invalid Giftcard";
+        messageDiv1.style.display = "block";
+
+      } else {
+        messageDiv1.style.display = "none";
+        messageDiv2.style.display = "block";
+        messageDiv2.value = "Balance:  " + response.data.balance.toFixed(2) + "";
+      }
+    })
+}
+</script>
+
+{% endblock %}

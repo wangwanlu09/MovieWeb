@@ -1,0 +1,94 @@
+{% extends "navdash_customer.html" %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+
+
+<style>
+    #searchInput {
+        width: 300px;
+        padding: 5px;
+    }
+    #searchResults {
+        list-style: none;
+        padding: 0;
+    }
+</style>
+
+
+{{ actor_list }}
+<p>-------------------------</p>
+<br>
+{{ actor_names }}
+<p>-------------------------</p>
+<br>
+<input type="text" id="searchInput" oninput="search()">  <button onclick="addItem()">Add</button>
+<ul id="searchResults"></ul> 
+
+
+<div id="movieDetailsContainer"></div>
+
+<script>
+    const actorList = {{ actor_names | tojson | safe }};
+    const selectedItems = [];
+
+    function search() {
+        const input = document.getElementById('searchInput').value.toLowerCase();
+        const resultsContainer = document.getElementById('searchResults');
+        resultsContainer.innerHTML = '';
+
+        if (input.trim() !== '') {
+            const filteredItems = actorList.filter(actor => actor.toLowerCase().includes(input));
+            filteredItems.forEach(item => {
+                const listItem = document.createElement('li');
+                listItem.textContent = item;
+                listItem.onclick = function () {
+                    selectItem(item);
+                };
+                resultsContainer.appendChild(listItem);
+            });
+        }
+    }
+
+    function selectItem(item) {
+        selectedItems.push(item);
+        document.getElementById('searchInput').value = item;
+
+        // Clear previous movie details
+        document.getElementById('movieDetailsContainer').innerHTML = '';
+
+        // Make an AJAX call to your Flask backend to add the item
+        fetch('/add_item', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ item: item }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Handle the response from the backend
+            if ('movie_details' in data) {
+                // Assuming you have a function to display the movie details
+                displayMovieDetails(data.movie_details);
+            } else {
+                // Handle error case
+                console.error('Error:', data.message);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    // Function to display movie details in the HTML element
+    function displayMovieDetails(movieDetails) {
+        const movieDetailsContainer = document.getElementById('movieDetailsContainer');
+
+        // Assuming `movieDetails` is an array
+        movieDetails.forEach(movie => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `Title: ${movie.title}, Actor: ${movie.actor_name}, Details: ${JSON.stringify(movie)}`;
+            movieDetailsContainer.appendChild(listItem);
+        });
+    }
+</script>
+
+{% endblock %}

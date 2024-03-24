@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% block title %}Select Tickets{% endblock %}
+{% block content %}
+<style>
+  body,
+  html {
+    height: 100%;
+    margin: 0;
+    background-color: black;
+  }
+  .rating {
+        display: inline-block;
+    min-width: 30px;
+    height: 30px;
+    border: 1px solid white;
+    font-size: 18px;
+    margin: 3px;
+    text-align: center;
+    line-height: 30px;
+    padding: 0px 5px;
+    vertical-align: bottom;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    text-shadow: none !important;
+    box-sizing: content-box !important;
+    margin-bottom: 0.5em;
+      }
+</style>
+
+<!---Extension--->
+<div class="container d-flex justify-content-end mt-5"
+  style="color:white; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">
+  <h1>Book MOVIE</h1>
+</div>
+
+<div class="container d-flex mb-4" style="border-top: 1px solid gray;"></div>
+
+<!---jinja--->
+<div class="container d-flex flex-column justify-content-center">
+  <div class="card mb-4" style="max-width: 1000px; background-color: transparent;">
+    <div class="row g-0">
+      <div class="col-md-3">
+        <img src="{{selected_movie['image_url']}}" class="img-fluid rounded-start" alt="Movie1"
+          style="width: 180px; height:auto">
+      </div>
+      <!---jinja---->
+      <div class="col-md-8">
+        <div class="card-body bg-transparent text-white">
+          <h5 class="card-title"><span style="font-weight: bold;">{{selected_movie['title']}}</span></h5>
+          <!---jinja change path--->
+          <div class="mb-2 rating" style="background-color:{{ selected_movie['color'] }};"><p style="font-weight: bold; font-size: medium; color:black; margin: 0; text-align: center">{{ selected_movie['rating_code'] }}</p></div>
+          <span style="font-weight: bold; font-size: small; color:gray">{{selected_movie['runtime']}}m |
+            {{selected_movie['genre_name']}}</span>
+          <P class="card-text mt-2"><span style="font-weight: bold; font-size: 16px;">Date:</span>
+            {{selected_date['weekday_name']}} {{selected_session['session_date'].strftime('%d/%m/%Y') }}</P>
+          <P class="card-text mt-2"><span style="font-weight: bold; font-size: 16px;">Time:</span> {{
+            selected_session['session12hours'] }}</P>
+          <P class="card-text mt-2"><span style="font-weight: bold; font-size: 16px;">Cinema:</span>
+            {{selected_session['name']}}</P>
+          <p class="card-text mb-3" style="font-weight: 50;"><span
+              style="font-weight: bold; font-size: 25px;">"</span>{{selected_movie['descriptions']}}<span
+              style="font-weight: bold; font-size: 25px;">"</span></p>
+          <P class="card-text mt-2"><span style="font-weight: bold; font-size: 16px;">Starring:
+            </span>{{selected_movie['starring']}}</P>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!---jinja Tickets--->
+
+<div class="container text-white">
+    <h4><span style="font-weight: bold;">Select Tickets</span></h4>
+</div>
+<div class="container d-flex mb-4" style="border-top: 1px solid gray;"></div>
+
+{% for t in tickets %}
+      <div class="container d-flex justify-content-between mb-4">
+          <div class="text-white mx-5">{{ t['ticket_type'] }}</div>
+  
+      <div class="container d-flex justify-content-end text-white">
+          <div class="mx-5">${{ t['price'] }}</div>
+      </div>
+      <div class="mx-5">
+        <select id="{{ t['ticketid'] }}Count" class="seat-select" onchange="calculateTotal()">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+    </div>
+</div>
+<div class="container d-flex mb-4" style="border-top: 1px solid gray;"></div>
+
+{% endfor %}
+
+<div class="container d-flex justify-content-between mb-4">
+  <div class="text-white mx-5">Total Price</div>
+    <div class="container d-flex justify-content-end text-white">
+      <div class="mx-5" id="totalPrice">$0.00</div>
+    </div>
+</div>
+<div class="container d-flex mb-4" style="border-top: 1px solid gray;"></div>
+
+<!-- promotion information -->
+{% if is_tuesday != 1 and promotion %}
+<div class="text-white container ">
+ <p> Promotion <span style="color: cornflowerblue;">"{{ promotion['descriptions'] }}"</span> is available, please use promotion code   <strong style="color:aquamarine;"> {{ promotion['promotion_code'] }}</strong> at checkout. 
+  Click for promotion detail 
+  <strong>
+    <a style="color: aquamarine;" target="_blank" href="{{ url_for('promotions.promotion_home_detail', promotionid = promotion['promotionid']) }}">
+    HERE</a>
+  </strong>.
+</p>
+</div>
+{% endif %}
+
+<!-- This form will be hidden for passing values to the back end -->
+<div class="container d-flex justify-content-end">
+  <button type="submit" class="btn btn-outline-light btn-light btn-dark mx-3"><a href="/details/movie?movieid={{ selected_movie['movieid'] }}" class="text-decoration-none text-white">Back</a></button>
+      <form action="{{url_for('booking.select_seats')}}" method="post" id="myFormId">
+        <input type="hidden" id="movieid" name="hidden_movieid" value="{{selected_movie['movieid']}}">
+        <input type="hidden" id="sessionid" name="hidden_sessionid" value="{{selected_session['sessionid']}}">
+        <input type="hidden" id="cinemaid" name="hidden_cinemaid" value="{{selected_session['cinemaid']}}">
+        <input type="hidden" id="hiddenTotalPrice" name="hidden_totalPrice">
+        <input type="hidden" id="hiddenTotalCount" name="hidden_totalCount">
+        <input type="hidden" id="ticketQuantitiesHiddenInput" name="hidden_ticketQuantities">
+        <button type="button" class="btn btn-light" onclick="sendDateToBackendAndNavigate()">Continue</button>
+      </form>
+</div>
+
+<script>
+  // tickets variable definition
+  var tickets = {{ tickets | tojson | safe }};
+  var remaining_seats = {{ remaining_seats | tojson | safe }};
+</script>
+<script src="{{ url_for('static', filename='js/booking_tickets.js') }}"></script>
+
+{% endblock %}

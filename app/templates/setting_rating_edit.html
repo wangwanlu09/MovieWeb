@@ -1,0 +1,73 @@
+{% extends "navdash_admin.html" %}
+{% block title %}Edit Rating{% endblock %}
+{% block content %}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="personal-card text-left">
+                <!-- Use Jinja -->
+          <div class="modal-body mt-2">
+            <form action="{{ url_for('manage_settings.setting_rating_update') }}" method="post">
+              <div class="modal-header">
+                <h5 class="modal-title" id="changePromotionModal" style="color:grey; font-weight: bold;">Edit Movie Rating</h5>
+              </div>
+              <div class="mb-3">
+                <label for="genreid" class="form-label" style="color:grey">Rating ID:</label>
+                <input type="text" class="form-control mb-2" id="movieid" disabled value="{{ rating['ratingid'] }}">
+                <input type="text" class="form-control mb-2" name="ratingid" hidden value="{{ rating['ratingid'] }}">
+  
+                <label for="newGenre" class="form-label" style="color:grey">Movie Rating:</label>
+                <input type="text" class="form-control mb-2" name="ratingcd" value="{{ rating['rating_code'] }}" required maxlength="5" pattern="^[a-zA-Z0-9]{1,5}$" title="Only letters and numbers are allowed. 5 letters maximum">              
+
+                <label for="genreid" class="form-label" style="color:grey">Rating Description:</label>
+                <input type="text" class="form-control mb-2" name="desc" value="{{ rating['descriptions'] }}" maxlength="100">
+
+                <label for="Type" class="form-label" style="color:grey">Color:</label>
+                <select name="color"  class="form-select mb-2" aria-label="Default select example" required>
+                  <option value="" disable>Please select color for new rating</option>
+                  {% for color in colorlist %}
+                  {% if color == rating['color'] %}
+                  <option value="{{ color }}" selected>{{ color | capitalize }}</option>
+                  {% else %}
+                  <option value="{{ color }}">{{ color | capitalize }}</option>
+                  {% endif %}
+                  {% endfor %} 
+                </select> 
+
+          </div>
+          <div class="modal-footer container d-flex justify-content-between">
+            <div><a role="button" class="btn btn-success mx-2" href="{{ url_for('manage_settings.setting_ratings') }}">Back</a></div>
+            <div><button type="button" class="btn btn-secondary mx-2" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-dark">Save Changes</button></div>
+          </div>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<style>
+    body{
+      background-color: #ddd;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+   .personal-card {
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      position: relative;
+  }
+  
+  .personal-card {
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      position: relative;
+  }
+</style>
+
+{% endblock %}

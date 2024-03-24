@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Promotions{% endblock %}
+{% block head %}
+<style>
+      body, html {
+        height: 100%;
+        margin: 0;
+        overflow: auto;
+        background-color: black;
+      }
+      .profile-picture {
+      max-width: 40px;
+      height: auto;
+      border-radius: 50%;
+      }
+      a{
+          text-decoration: none;
+      }
+</style>
+{% endblock %}
+
+{% block content %}
+
+
+    <!-- Extension -->
+    <div class="container d-flex justify-content-end mt-5 mb-4" style="color:black; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">
+        <h1 class="text-white">PROMOTION</h1>
+    </div>
+  
+    <!-- <div class="container-fluid">
+      <div class="row">
+          {% for promotion in promotionlist %}
+              <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
+                  
+                  <div class="card" style="width: 30rem; background-color: rgb(61, 61, 61); color:white;" >
+                    <img src="{{ promotion['image'] }}" class="card-img-top" alt="Promotion image">
+                    <div class="card-body container d-flex justify-content-between align-items-end">
+                      <div class="mx-2">
+                        <h5 class="card-title">{{ promotion['title'] }}</h5>
+                        <p class="card-text" style="font-size: 20px;">{{ promotion['descriptions'] }}</p>
+                      </div>
+                      <div>
+                        <a href="{{ url_for('promotions.promotion_home_detail', promotionid = promotion['promotionid']) }}" class="btn btn-outline-light">More</a>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+          {% endfor %}
+      </div>
+  
+    </div> -->
+
+    <div class="container d-flex justify-content-center">
+      <div class="row">
+      {% for promotion in promotionlist %}
+      <div class="card mx-2 mb-4" style="width: 20rem; background-color: rgb(61, 61, 61); color:white;" >
+          <a href="{{ url_for('promotions.promotion_home_detail', promotionid = promotion['promotionid']) }}"><img src="{{ promotion['image'] }}" class="card-img-top" alt="Promotion image"></a>
+          <div class="card-body container d-flex justify-content-between align-items-end">
+              <div class="mx-2">
+                  <h5 class="card-title">{{ promotion['title'] }}</h5>
+              </div>
+              <div>
+                  <a href="{{ url_for('promotions.promotion_home_detail', promotionid = promotion['promotionid']) }}" class="btn btn-outline-light">More</a>
+              </div>
+          </div>  
+      </div>
+      {% endfor %}
+  </div>
+  </div>
+
+
+      
+
+  
+{% endblock %}
